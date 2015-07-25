@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no"> 
+  <title>Test Pocket</title>
+  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.css">
+  <link rel="stylesheet" href="style/fonts/iconfont.css">
+  <link rel="stylesheet" href="style/main.css">
+  <script src="../js/zepto.js"></script>
+  <script src="../js/touch.js"></script>
+</head>
+<body>
+  <div class="menu-bar">
+    <div id="main-menu" class="primary">
+      <div class="left-compo collapsed">
+        <a href="#" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-list"></i></a>
+      </div>
+      <div class="page-title">
+        账目统计
+      </div>
+      <div class="right-compo">
+        <a href="edit.html"><i class="iconfont icon-bianji"></i></a>
+      </div>
+    </div>
+    <div id="navigation" class="secondory collapsed clearfix">
+      <a class="active" href="/list-view">账目列表</a>
+      <a href="/statistics-view">账目统计</a>
+      <a href="/graph-view">账目图表</a>
+    </div>
+  </div>  
+  <div class="main-container">
+    <div class="filter">
+      
+    </div>
+      <div class="panel category-income collapsed">
+      <div class="panel-title">
+        <span class="category">
+           <i class="category-icon category-income"></i>收入
+        </span>
+        <span class="money income">+12345</span>
+        <span class="control"><i class="iconfont icon-qianjin"></i></span>
+      </div>
+      <div class="panel-body"></div>
+      </div>
+      <div class="panel category-clothes collapsed">
+        <div class="panel-title">
+          <span class="category">
+             <i class="category-icon category-clothes"></i>衣服
+          </span>
+          <span class="money income">+12345</span>
+          <span class="control"><i class="iconfont icon-qianjin"></i></span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+      <div class="panel category-eating collapsed">
+        <div class="panel-title">
+          <span class="category">
+             <i class="category-icon category-eating"></i>饮食
+          </span>
+          <span class="money income">+12345</span>
+          <span class="control"><i class="iconfont icon-qianjin"></i></span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+      <div class="panel category-house collapsed">
+        <div class="panel-title">
+          <span class="category">
+             <i class="category-icon category-house"></i>住宿
+          </span>
+          <span class="money income">+12345</span>
+          <span class="control"><i class="iconfont icon-qianjin"></i></span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+      <div class="panel category-transport collapsed">
+        <div class="panel-title">
+          <span class="category">
+             <i class="category-icon category-transport"></i>交通
+          </span>
+          <span class="money income">+12345</span>
+          <span class="control"><i class="iconfont icon-qianjin"></i></span>
+        </div>
+        <div class="panel-body collapsed">
+          <div class="list">
+            <div class="list-item">
+              <div class="item">
+                <span class="item-description">机票</span>
+                <span class="item-money payment">-123</span>
+                <span class="item-date">15/07/21</span>
+              </div>
+              <div class="item-control"></div>
+            </div>
+            <div class="list-item">
+              <div class="item">
+                <span class="item-description">机票</span>
+                <span class="item-money payment">-123</span>
+                <span class="item-date">15/07/21</span>
+              </div>
+              <div class="item-control"></div>
+            </div>
+            <div class="list-item">
+              <div class="item">
+                <span class="item-description">机票</span>
+                <span class="item-money payment">-123</span>
+                <span class="item-date">15/07/21</span>
+              </div>
+              <div class="item-control"></div>
+            </div>
+            <div class="list-item">
+              <div class="item">
+                <span class="item-description">机票</span>
+                <span class="item-money payment">-123</span>
+                <span class="item-date">15/07/21</span>
+              </div>
+              <div class="item-control"></div>
+            </div>
+            <div class="list-item">
+              <div class="item">
+                <span class="item-description">机票</span>
+                <span class="item-money payment">-123</span>
+                <span class="item-date">15/07/21</span>
+              </div>
+              <div class="item-control"></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="panel category-shopping collapsed">
+        <div class="panel-title">
+          <span class="category">
+             <i class="category-icon category-shopping"></i>购物
+          </span>
+          <span class="money income">+12345</span>
+          <span class="control"><i class="iconfont icon-qianjin"></i></span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+      <div class="panel category-others collapsed">
+        <div class="panel-title">
+          <span class="category">
+             <i class="category-icon category-others"></i>其他
+          </span>
+          <span class="money payment">-123</span>
+          <span class="control"><i class="iconfont icon-qianjin"></i></span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+  </div>
+  <script>
+    $().ready(function() {
+      $('.sub-toggle').on('click', function(e) {
+        e.preventDefault();
+        var target = $($(this).data('target'));
+        target.toggleClass('collapsed');
+      });
+      
+      $('.list-item').on('swipeLeft', function() {
+        $(this).addClass('slide-out').siblings().removeClass('slide-out');
+        $(this).parent('.list').addClass('slide-out');
+      });
+      $('.list-item').on('swipeRight', function() {
+        $(this).removeClass('slide-out');
+      });
+      $('.list-item').on('tap', function() {
+        var list = $(this).parent('.list');
+        if (list.hasClass('slide-out')) {
+          $(this).removeClass('slide-out').siblings().removeClass('slide-out');
+          list.removeClass('slide-out');
+        }
+      });
+      $('.panel-title').click(function() {
+//        $(this).parent('.panel').toggleClass('collapsed')
+//          $(this).parent('.panel').find('.panel-body').animate( {
+//            height: 100%;
+//          });
+        $(this).parent('.panel').find('.panel-body').toggleClass('collapsed');
+      });
+    });
+  </script>
+</body>
+</html>

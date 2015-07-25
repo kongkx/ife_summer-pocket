@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no"> 
+  <title>Test Pocket</title>
+  <link rel="stylesheet" href="style/fonts/iconfont.css">
+  <link rel="stylesheet" href="style/main.css">
+  <script src="js/zepto.js"></script>
+  <script src="js/touch.js"></script>
+  <script src="js/datacontroller.js"></script>
+  <script src="js/viewcontroller.js"></script>
+  <script src="js/main.js"></script>
+  
+</head>
+<body>
+  <div class="menu-bar inverse">
+    <div id="main-menu" class="primary">
+      <div class="left-compo collapsed">
+        <a href="" onclick="history.back();" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-icon11"></i></a>
+      </div>
+      <div class="page-title">
+        记一笔
+      </div>
+      <div class="right-compo">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#redirect" id="save" type="submit" form="edit-form">保存</button>
+      </div>
+    </div>
+  </div> 
+  <div class="main-container">
+    <div class="categories">
+      <div class="option-group">
+        <div class="option category-income" data-category-id="1">
+          <i class="category-icon category-income"></i> 收入
+        </div>
+      </div>
+      <div class="option-group">
+        <div class="option category-clothes" data-category-id="2">
+          <i class="category-icon category-clothes"></i> 衣服
+        </div>
+        <div class="option category-eating" data-category-id="3">
+          <i class="category-icon category-eating"></i> 饮食
+        </div>
+        <div class="option category-house" data-category-id="4">
+          <i class="category-icon category-house"></i> 住宿
+        </div>
+        <div class="option category-transport" data-category-id="5">
+          <i class="category-icon category-transport"></i> 交通
+        </div>
+        <div class="option category-shopping" data-category-id="6">
+          <i class="category-icon category-shopping"></i> 购物
+        </div>
+        <div class="option category-others" data-category-id="7">
+          <i class="category-icon category-others"></i> 其他
+        </div>
+      </div>
+    </div>
+    <div class="edit-form">
+     <form action="" id="edit-form">
+     <div class="form-group">
+      <div class="current-category">
+        <i class="category-icon category-transport"></i>
+      </div>
+      <input type="text" hidden name="id">
+      <input type="text" hidden name="category" id="category" >
+      <input type="text" class="item-description" placeholder="" name="description">
+      <input type="number" class="item-money" name="money" placeholder="0.00" required>
+      </div>
+      </form>
+    </div>
+  </div>
+  <div id="redirect" class="modal default fade">
+    <div class="modal-container">
+      <header class="modal-header">
+        账目已保存
+      </header>
+      <div class="modal-content">
+        <div class="item category-transport">
+          <i class="item-category category-icon category-transport"></i>
+          <span class="item-description">深圳出差机票</span>
+          <span class="item-money">￥432</span>
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button class="btn btn-default" data-action="moveback">返回列表</button>
+        <button class="btn btn-primary" data-action="reload">再记一笔</button>
+      </footer>
+    </div>
+  </div>
+  <script>
+    $().ready(function() {
+      // search string action
+      if (location.search) {
+        var paraStr = location.search.substr(1);
+        var paraArr = paraStr.split("&");
+        var paraObject = {}
+        for (var i in paraArr) {
+          var tmp = paraArr[i].split("=");
+          paraObject[tmp[0]]=tmp[1];
+        }
+        console.log(paraObject);
+      }
+      if (paraObject != undefined && paraObject.id != null) {
+        var form = $('.edit-form');
+        var item = pocketController.getItemById(paraObject.id);
+        var options = $('.categories').find('.option');
+      
+        form.find('input[name="id"]')[0].value = item.id;
+        form.find('input[name="category"]')[0].value = item.categoryId;
+        form.find('input[name="description"]')[0].value = item.description;
+        form.find('input[name="description"]')[0].placeholder = item.categoryTitle;
+        form.find('input[name="money"]')[0].value = item.money;
+        console.log(item);
+        
+        options.each(function(index) {
+          var option = $(this);
+          if (option.data('categoryId') == item.categoryId) {
+//            option.addClass('active');  
+            form.find('.current-category').html(option.find('i').clone());
+          }
+        });
+        
+      }
+      
+      
+      $('.categories').find('.option').on('click', function() {
+        var option = $(this);
+        var contents = option.contents();
+        var form = $('.edit-form');
+        form.find('.current-category').html(option.find('i').clone());
+        form.find('.item-description')[0].placeholder=contents[2].nodeValue.trim();
+        form.find('input[name="category"')[0].value = option.data('categoryId');
+        alert(form.find('input[name="category"')[0].value);
+      });
+      
+//      $('#save').on('click', function() {
+//        var form = $('.edit-form');
+//        console.log(form.find('input[name="categoryId"')[0].value);
+//        console.log(form.find('input[name="description"')[0].value);
+//        console.log(form.find('input[name="money"]')[0].value);
+//        $($(this).data('target')).removeClass('fade');
+//      });
+      $('#redirect').on('click', function(e) {
+        var target = $(e.target);
+        var actionCode = target.data('action');
+        if (actionCode != undefined) {
+          switch(actionCode) {
+            case "moveback":
+              window.history.back();
+              break;
+            case "reload":
+              console.log(window.location);
+//              window.location.reload();
+          }
+        }
+        $(this).addClass('fade');
+      });
+      
+      $('#edit-form').submit(function(e) {
+        e.preventDefault();
+        var code = $(this).serializeArray();
+        var preprocess = {};
+        var operaCode = "create";
+        for ( var i in code) {
+          var prop = code[i]; 
+          switch(prop['name']) {
+            case 'id':
+              if (prop['value'] != "") {
+                preprocess.id = prop['value'];
+                operaCode = 'update';
+                console.log
+              }
+              break;
+            case 'category':
+              preprocess.categoryId = prop['value'];
+              break;
+            case 'description':
+              preprocess.description = prop['value'];
+              break;
+            case 'money':
+              preprocess.money = prop['value'];
+              break;
+            default: ;
+          };
+        }
+        switch(operaCode) {
+          case "create": 
+            if (pocketController.addItem(preprocess)) {
+              // to-be-done: call the modal module to modify '#redirect' and show it;
+              $('#redirect').removeClass('fade');
+            } else {
+              console.log("something wrong happened.");
+            }
+            break;
+          case "update":
+            if (pocketController.updateItem(preprocess.id, preprocess)) {
+              $('#redirect').removeClass('fade');
+            } else {
+              console.log("something wrong happend.");  
+            }
+        }
+        
+      });
+    });
+    
+    
+  </script>
+</body>
+</html>
