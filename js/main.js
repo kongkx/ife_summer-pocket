@@ -6,36 +6,26 @@ var demoData = [
 ];
 
 var categories = [
-  {cid: '1', categoryName: 'income', categoryTitle: '收入', type: 'income'},  // custom hexcode and icon maybe.
-  {cid: '2', categoryName: 'clothes', categoryTitle: '衣服', type: 'payment'},
-  {cid: '3', categoryName: 'eating', categoryTitle: '饮食', type: 'payment'},
-  {cid: '4', categoryName: 'house', categoryTitle: '住宿', type: 'payment'},
-  {cid: '5', categoryName: 'transport', categoryTitle: '交通', type: 'payment'},
-  {cid: '6', categoryName: 'shopping', categoryTitle: '购物', type: 'payment'},
-  {cid: '7', categoryName: 'others', categoryTitle: '其他', type: 'payment'},
+  {id: '1', categoryName: 'income', categoryTitle: '收入', type: 'income'},  // custom hexcode and icon maybe.
+  {id: '2', categoryName: 'clothes', categoryTitle: '衣服', type: 'payment'},
+  {id: '3', categoryName: 'eating', categoryTitle: '饮食', type: 'payment'},
+  {id: '4', categoryName: 'house', categoryTitle: '住宿', type: 'payment'},
+  {id: '5', categoryName: 'transport', categoryTitle: '交通', type: 'payment'},
+  {id: '6', categoryName: 'shopping', categoryTitle: '购物', type: 'payment'},
+  {id: '7', categoryName: 'others', categoryTitle: '其他', type: 'payment'},
 ];
 
 $().ready(function() {
   // data controller init;
+  pocketData = new DataController();
   if (localStorage.getItem('pocketData') != null ) {
-    pocketController = new DataController(JSON.parse(localStorage.getItem('pocketData')));
+    var dataArray = JSON.parse(localStorage.getItem('pocketData'));
+    pocketData.dataCollection('item', new DataCollection(dataArray['item']));
+    pocketData.dataCollection('category', new DataCollection(dataArray['category']));
+    
   } else {
-    pocketController = new DataController({
-      items: demoData,
-      categories: categories,
-      itemCount: demoData.length,
-      categoryCount: categories.length,
-    });  
+    pocketData.dataCollection('item', new DataCollection({data: demoData, accumulator: demoData.length}));
+    pocketData.dataCollection('category', new DataCollection({data: categories, accumulator: categories.length}));
   }
-  
-  // view controller init;
-  vController = new ViewController('.main-container');
-  
-  var defaultContent = '<div class="jumbotron ">';
-  defaultContent += '<p>亲，你的账本还没有账目哦。<p></p>新建的账目试试吧</p>';
-  defaultContent += '<a href="edit.html" class="btn btn-primary btn-lg" data-action="edit" data-id="new">新建账目</a>';
-  defaultContent += '</div>';
-  
-  vController.setDefaultContent(defaultContent);
   
 });

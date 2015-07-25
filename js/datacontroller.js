@@ -46,9 +46,7 @@ DataCollection.prototype.getItemById = function(id) {
   var data = this.data;
   var result = [];
   for (var i in data) {
-    console.log(data[i]);
     if (data[i].id == id) {
-      console.log(data[i]);
       result.push($.extend(true,{},data[i]));
     }
   }
