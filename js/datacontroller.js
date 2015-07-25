@@ -1,151 +1,156 @@
-function DataController(data) {
-  this.data = $.extend(DataController.DEFAULT,data);
+/**
+ * DataCollection 
+ * addItem;
+ * updateItem;
+ * deleteItem;
+ * createItem;
+ * getItemById;
+ * getItemsByProprety;
+ * getAll
+ * getValueById;  // for specific key value
+ * 
+ */
+
+function DataCollection(obj) {
+  this.data = obj.data;
+  this.accumulator = obj.accumulator;
+  this.pointer = 0;
 }
 
-DataController.DEFAULT = {
-  items: [],
-  categories: [],
-  itemCount: 0,
-  categoryCount: 0,
+DataCollection.prototype.addItem = function(obj) {
+  var tmp = $.extend({id: ++this.accumulator, update: Date.now(), date: Date.now()}, obj);
+  this.data.push(tmp);
+  return tmp.id;
 }
 
-DataController.prototype.getItemById = function(id) {
-  var items = this.data.items;
-  for (var i in items) {
-    if (items[i].id == id) {
-      var tmp = $.extend(true, {}, items[i]);
-      var category = this.getCategoryById(tmp.categoryId);
-      tmp.categoryTitle = category.categoryTitle;
-      return tmp; 
+DataCollection.prototype.updateItem = function(id, obj) {
+  var origin = this.getItemById(id)[0];
+  var tmp = $.extend({update: Date.now()}, obj);
+  var after = $.extend(origin, tmp);
+  // index of an array and replace maybe;
+  this.deleteItem(id);
+  this.data.push(after);
+}
+
+DataCollection.prototype.deleteItem = function(id) {
+  var data = this.data;
+  for (var i in data) {
+    if (data[i].id == id) {
+      data.splice(i, 1);
+      break;
     }
   }
 }
 
-DataController.prototype.getItemsByProperty = function(prop, value) {
+DataCollection.prototype.getItemById = function(id) {
+  var data = this.data;
+  var result = [];
+  for (var i in data) {
+    console.log(data[i]);
+    if (data[i].id == id) {
+      console.log(data[i]);
+      result.push($.extend(true,{},data[i]));
+    }
+  }
+  return result;
+}
+
+DataCollection.prototype.getItemsByProperty = function(prop, value) {
   var results = [];
-  var items = this.data.items;
-  for (var i in items) {
-    if (items[i][prop] == value) {
-      results.push(items[i]);
+  var data = this.data;
+  for (var i in data) {
+    if (data[i][prop] == value) {
+      results.push($.extend({},data[i]));
     }
   }
   return results;
 }
 
-DataController.prototype.getItemsByCategory = function(id) {
-  return this.getItemsByProperty('cid', id);
+DataCollection.prototype.getAll = function() {
+  return $.extend(true, [], this.data);
 }
 
-DataController.prototype.getCategoryById = function(id) {
-  var categories = this.data.categories;
-  for (var i in categories) {
-    if (categories[i].cid == id) {
-      return categories[i]; 
-    }
-  }
-}
-
-DataController.prototype.getCategoryTitle = function(id) {
-  var category = this.getCategoryById(id);
-  if (category) {
-    return category.categoryTitle;
-  }
-}
-
-DataController.prototype.getCategoryName = function(id) {
-  var category = this.getCategoryById(id);
-  if (category) {
-    return category.categoryName;
-  }
-}
-
-DataController.prototype.getCategoryType = function(id) {
-  var category = this.getCategoryById(id);
-  if (category) {
-    return category.type;
-  }
+DataCollection.prototype.getValueById = function(id, key) {
+  return this.getItemById(id)[0][key];
 }
 
 
-DataController.prototype.getMoneyPrefix = function(id) {
-  var category = this.getCategoryById(id)
-  if (category) {
-    switch (category.type) {
-      case 'income':
-        return "+";
-      case 'payment':
-        return "-";
-      default:
-        console.log("category type error");
-        return " ";
-    }
+function ItemCollection() {
+  
+}
+
+function categoryCollection() {
+  
+}
+
+/**
+ * Manipulate multiple data collection together and provide customized output;
+ * 
+ */
+function DataController() {
+  this.data = {};
+  this.dataJoin = {};
+  
+}
+
+DataController.prototype.dataCollection = function(name, obj) {
+  if (obj instanceof DataCollection) {
+    this.data[name] = obj;
+    this.dataJoin[name] = {};
   }
 }
 
-DataController.prototype.addItem = function(obj) {
-  var item = $.extend({id: this.data.itemCount+1, date: Date.now() }, obj);
-  var before = this.data.items.length;
-  var after = this.data.items.push(item);
-
-  if (after>before) {
-    this.data.itemCount = this.data.itemCount + 1;
-    console.log(this.data.itemCount);
-    this.record();
-    return true;
-  } else {
-    return false;
-  }
+DataController.prototype.addItem = function(name, obj) {
+  return this.data[name].addItem(obj);
 }
 
-DataController.prototype.updateItem = function(id, obj) {
-  this.deleteItemById(id);
-  var item = $.extend({date: Date.now()}, obj);
-  var count = this.data.items.length;
-  if (this.data.items.push(item)>count) {
-    this.record();  
-    return true;
-  } else {
-    return false;
-  }
+DataController.prototype.updateItem = function(name, id, obj) {
+  return this.data[name].updateItem(obj);
 }
 
-DataController.prototype.deleteItemById = function(id) {
-  var items = this.data.items;
-  for (var i in items) {
-    if (items[i].id == id) {
-      items.splice(i, 1);
-      break;
-    }
-  }
-  this.record();
+DataController.prototype.deleteItem = function(name, id) {
+  return this.data[name].deleteItem(id);
+}
+
+DataController.prototype.getItemById = function(name, id) {
+  return this.data[name].getItemById(id); 
+}
+
+DataController.prototype.getItemsByProperty = function(name, prop, value) {
+  return this.data.name.getItemsByProperty(prop, value);
 }
 
 DataController.prototype.record = function() {
     localStorage.setItem('pocketData', JSON.stringify(this.data));
 }
 
-DataController.prototype.generateOutput = function(data) {
-  if (data == undefined) {
-    data = this.data.items;  
+DataController.prototype.addJoin = function(left, right) {
+  // left = item.categoryId, right = category.id;
+  var leftPara = left.split(".");
+  this.dataJoin[leftPara[0]][leftPara[1]] = [].push(right);
+}
+
+DataController.prototype.generateOutput = function(name, obj) {
+  var output = {};
+  var joinSettings = this.dataJoin[name];
+  for (var key in joinSettings) {
+    //
+    var para = joinSettings[key].split('.');
+    var joinObj = this.generateOutput(this.getItemsByProperty(para[0],para[1],obj[key]));
+    delete joinObj[para[1]];
   }
-  var output = $.extend(true, [], data);
+}
+
+DataController.prototype.outputAll = function(str) {
+
+}
+
+DataController.prototype.outputItem = function(id) {
   
-  for (var i in output) {
-    var item = output[i];
-    var category = this.getCategoryById(item.categoryId);
-    console.log(category);
-    item.categoryTitle = category.categoryTitle;
-    item.categoryName = category.categoryName;
-    if (item.description == "") {
-      item.description = category.categoryTitle;  
-    }
-    item.type = category.type;
-    item.money = this.getMoneyPrefix(item.categoryId) + item.money;
-    item.date = _customDateString(new Date(item.date));
-    delete item.categoryId;
-  }
+}
+
+DataController.prototype.outputGroup = function(str) {
   
-  return output;
 }
 
 function _customDateString(obj, format) {
