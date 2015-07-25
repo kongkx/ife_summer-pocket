@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.css">
   <link rel="stylesheet" href="style/fonts/iconfont.css">
   <link rel="stylesheet" href="style/main.css">
-  <script src="../js/zepto.js"></script>
-  <script src="../js/touch.js"></script>
+  <script src="js/zepto.js"></script>
 </head>
 <body>
   <div class="menu-bar">
@@ -26,7 +25,7 @@
       </div>
     </div>
     <div id="navigation" class="secondory collapsed clearfix">
-      <a class="active" href="/list-view">账目列表</a>
+      <a class="active" href="index.html">账目列表</a>
       <a href="/statistics-view">账目统计</a>
       <a href="/graph-view">账目图表</a>
     </div>
@@ -156,28 +155,6 @@
         e.preventDefault();
         var target = $($(this).data('target'));
         target.toggleClass('collapsed');
-      });
-      
-      $('.list-item').on('swipeLeft', function() {
-        $(this).addClass('slide-out').siblings().removeClass('slide-out');
-        $(this).parent('.list').addClass('slide-out');
-      });
-      $('.list-item').on('swipeRight', function() {
-        $(this).removeClass('slide-out');
-      });
-      $('.list-item').on('tap', function() {
-        var list = $(this).parent('.list');
-        if (list.hasClass('slide-out')) {
-          $(this).removeClass('slide-out').siblings().removeClass('slide-out');
-          list.removeClass('slide-out');
-        }
-      });
-      $('.panel-title').click(function() {
-//        $(this).parent('.panel').toggleClass('collapsed')
-//          $(this).parent('.panel').find('.panel-body').animate( {
-//            height: 100%;
-//          });
-        $(this).parent('.panel').find('.panel-body').toggleClass('collapsed');
       });
     });
   </script>

@@ -46,30 +46,63 @@
         var target = $($(this).data('target'));
         target.toggleClass('collapsed');
       });
-      
-      $('.list-item').on('swipeLeft', function() {
-        $(this).addClass('slide-out').siblings().removeClass('slide-out');
-        $(this).parent('.list').addClass('slide-out');
-      });
-      $('.list-item').on('swipeRight', function() {
-        $(this).removeClass('slide-out');
-      });
-      $('.list-item').on('tap', function() {
-        var list = $(this).parent('.list');
-        if (list.hasClass('slide-out')) {
-          $(this).removeClass('slide-out');
-          list.removeClass('slide-out');
+      $(document).on('swipeLeft', function(e) {
+        if ($(e.target).hasClass('.list-item')) {
+          $item = $(e.target);  
+        } else {
+          $item = $(e.target).parents('.list-item');
+        }
+        if ($item.length>0) {
+          $item.addClass('slide-out').siblings().removeClass('slide-out');  
+          $item.parents('.list').addClass('slide-out');
         }
       });
-      $('.item-edit').click(function() {
-        var id = $(this).data('id');
-        window.location =  "edit.html?id="+id; 
+      
+      $(document).on('swipeRight', function(e) {
+        if ($(e.target).hasClass('.list-item')) {
+          $item = $(e.target);  
+        } else {
+          $item = $(e.target).parents('.list-item');
+        }
+        if ($item.length>0) {
+          $item.removeClass('slide-out');
+        }
       });
-      $('.item-delete').click(function() {
-        var id = $(this).data('id');
-        pocketController.deleteItemById(id);
-        vController.updateView(vController.generateListView(pocketController.generateOutput()));
+      
+      $(document).on('tap', function(e) {
+        if ($(e.target).hasClass('.list-item')) {
+          $item = $(e.target);  
+        } else {
+          $item = $(e.target).parents('.list-item');
+        }
+        if ($item.length>0) {
+          var list = $item.parent('.list');
+          if (list.hasClass('slide-out')) {
+            list.removeClass('slide-out');
+            list.find('.list-item').removeClass('slide-out');
+          }
+        }
       });
+      
+      $(document).on('tap', function(e) {
+        if (e.target.tagName == "A") {
+          $anchor = $(e.target);  
+        } else {
+          $anchor = $(e.target).parent('a');
+        }
+        
+        if ($anchor.length>0) {
+          if ($anchor.hasClass("item-edit")) {
+            var id = $anchor.data('id');
+            window.location =  "edit.html?id="+id; 
+          } else if ($anchor.hasClass('item-delete')) {
+            var id = $anchor.data('id');
+            pocketController.deleteItemById(id);
+            vController.updateView(vController.generateListView(pocketController.generateOutput()));
+          }
+        };
+      });
+      
     });
   </script>
 </body>

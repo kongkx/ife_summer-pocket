@@ -91,7 +91,7 @@ DataController.prototype.addItem = function(obj) {
     this.data.itemCount = this.data.itemCount + 1;
     console.log(this.data.itemCount);
     this.record();
-    return true;
+    return item.id;
   } else {
     return false;
   }
@@ -103,7 +103,7 @@ DataController.prototype.updateItem = function(id, obj) {
   var count = this.data.items.length;
   if (this.data.items.push(item)>count) {
     this.record();  
-    return true;
+    return item.id;
   } else {
     return false;
   }
@@ -133,7 +133,6 @@ DataController.prototype.generateOutput = function(data) {
   for (var i in output) {
     var item = output[i];
     var category = this.getCategoryById(item.categoryId);
-    console.log(category);
     item.categoryTitle = category.categoryTitle;
     item.categoryName = category.categoryName;
     if (item.description == "") {

@@ -32,7 +32,7 @@ $().ready(function() {
   vController = new ViewController('.main-container');
   
   var defaultContent = '<div class="jumbotron ">';
-  defaultContent += '<p>亲，你的账本还没有账目哦。<p></p>新建的账目试试吧</p>';
+  defaultContent += '<p>亲，你的账本还没有账目哦。<p></p>新建一个账目试试吧</p>';
   defaultContent += '<a href="edit.html" class="btn btn-primary btn-lg" data-action="edit" data-id="new">新建账目</a>';
   defaultContent += '</div>';
   

@@ -85,12 +85,14 @@
       </div>
       <footer class="modal-footer">
         <button class="btn btn-default" data-action="moveback">返回列表</button>
-        <button class="btn btn-primary" data-action="reload">再记一笔</button>
+        <button class="btn btn-primary" data-action="another">再记一笔</button>
       </footer>
     </div>
   </div>
   <script>
     $().ready(function() {
+      var form = $('.edit-form');
+      var selectedCateogry = 1;
       // search string action
       if (location.search) {
         var paraStr = location.search.substr(1);
@@ -100,48 +102,34 @@
           var tmp = paraArr[i].split("=");
           paraObject[tmp[0]]=tmp[1];
         }
-        console.log(paraObject);
       }
-      if (paraObject != undefined && paraObject.id != null) {
-        var form = $('.edit-form');
-        var item = pocketController.getItemById(paraObject.id);
-        var options = $('.categories').find('.option');
       
+      if (paraObject != undefined && paraObject.id != null) {
+        var item = pocketController.getItemById(paraObject.id);
         form.find('input[name="id"]')[0].value = item.id;
         form.find('input[name="category"]')[0].value = item.categoryId;
         form.find('input[name="description"]')[0].value = item.description;
-        form.find('input[name="description"]')[0].placeholder = item.categoryTitle;
         form.find('input[name="money"]')[0].value = item.money;
-        console.log(item);
-        
-        options.each(function(index) {
-          var option = $(this);
-          if (option.data('categoryId') == item.categoryId) {
-//            option.addClass('active');  
-            form.find('.current-category').html(option.find('i').clone());
-          }
-        });
-        
+        selectedCateogry = item.categoryId;
       }
       
+      var options = $('.categories').find('.option');
       
-      $('.categories').find('.option').on('click', function() {
+      options.on('click', function() {
         var option = $(this);
         var contents = option.contents();
-        var form = $('.edit-form');
         form.find('.current-category').html(option.find('i').clone());
         form.find('.item-description')[0].placeholder=contents[2].nodeValue.trim();
         form.find('input[name="category"')[0].value = option.data('categoryId');
-        alert(form.find('input[name="category"')[0].value);
       });
       
-//      $('#save').on('click', function() {
-//        var form = $('.edit-form');
-//        console.log(form.find('input[name="categoryId"')[0].value);
-//        console.log(form.find('input[name="description"')[0].value);
-//        console.log(form.find('input[name="money"]')[0].value);
-//        $($(this).data('target')).removeClass('fade');
-//      });
+      options.each(function(index) {
+        var option = $(this);
+        if (option.data('categoryId') == selectedCateogry ) {
+          option.trigger('click');
+        }
+      });
+      
       $('#redirect').on('click', function(e) {
         var target = $(e.target);
         var actionCode = target.data('action');
@@ -150,9 +138,9 @@
             case "moveback":
               window.history.back();
               break;
-            case "reload":
+            case "another":
               console.log(window.location);
-//              window.location.reload();
+              window.location.replace("edit.html");
           }
         }
         $(this).addClass('fade');
@@ -187,19 +175,22 @@
         }
         switch(operaCode) {
           case "create": 
-            if (pocketController.addItem(preprocess)) {
-              // to-be-done: call the modal module to modify '#redirect' and show it;
-              $('#redirect').removeClass('fade');
-            } else {
-              console.log("something wrong happened.");
-            }
+            var itemId = pocketController.addItem(preprocess);
             break;
           case "update":
-            if (pocketController.updateItem(preprocess.id, preprocess)) {
-              $('#redirect').removeClass('fade');
-            } else {
-              console.log("something wrong happend.");  
-            }
+            var itemId = pocketController.updateItem(preprocess.id, preprocess);
+            break;
+          default:;
+        }
+        if (itemId !== false) {
+          var lastItem = pocketController.generateOutput([pocketController.getItemById(itemId)])[0];
+          var modalContent = '<div class="item category-'+ lastItem.categoryName +'">';
+          modalContent += '<i class="item-category category-icon category-'+ lastItem.categoryName +'"></i>'
+          modalContent += '<span class="item-description">' + lastItem.description + '</span>'
+          modalContent += '<span class="item-money">'+ lastItem.money +'</span>';
+          modalContent += '</div>';
+          $('#redirect').find('.modal-content').html(modalContent)
+          $('#redirect').removeClass('fade');
         }
         
       });
