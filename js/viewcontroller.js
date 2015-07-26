@@ -40,6 +40,24 @@ function ViewController(el) {
       }
     }
   });
+  
+  this.parent.on('tap', function(e) {
+    if (e.target.tagName == "A") {
+      $anchor = $(e.target);  
+    } else {
+      $anchor = $(e.target).parent('a');
+    }
+    if ($anchor.length>0) {
+      if ($anchor.hasClass("item-edit")) {
+        var id = $anchor.data('id');
+        window.location =  "edit.html?id="+id; 
+      } else if ($anchor.hasClass('item-delete')) {
+        var id = $anchor.data('id');
+        pocketController.deleteItemById(id);
+        vController.updateView(vController.generateListView(pocketController.generateOutput()));
+      }
+    };
+  });
 }
 
 ViewController.prototype.generateListView = function(data) {

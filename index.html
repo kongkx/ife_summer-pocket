@@ -39,31 +39,22 @@
   <script>
     $().ready(function() {
       // initView
+      vController = new ViewController('.main-container');
+
+      var defaultContent = '<div class="jumbotron ">';
+      defaultContent += '<p>亲，你的账本还没有账目哦。<p></p>新建一个账目试试吧</p>';
+      defaultContent += '<a href="edit.html" class="btn btn-primary btn-lg" data-action="edit" data-id="new">新建账目</a>';
+      defaultContent += '</div>';
+  
+      vController.setDefaultContent(defaultContent);
       vController.updateView(vController.generateListView(pocketController.generateOutput()));
       
+      
+      // title bar 
       $('.sub-toggle').on('click', function(e) {
         e.preventDefault();
         var target = $($(this).data('target'));
         target.toggleClass('collapsed');
-      });
-      
-      $(document).on('tap', function(e) {
-        if (e.target.tagName == "A") {
-          $anchor = $(e.target);  
-        } else {
-          $anchor = $(e.target).parent('a');
-        }
-        
-        if ($anchor.length>0) {
-          if ($anchor.hasClass("item-edit")) {
-            var id = $anchor.data('id');
-            window.location =  "edit.html?id="+id; 
-          } else if ($anchor.hasClass('item-delete')) {
-            var id = $anchor.data('id');
-            pocketController.deleteItemById(id);
-            vController.updateView(vController.generateListView(pocketController.generateOutput()));
-          }
-        };
       });
       
     });
