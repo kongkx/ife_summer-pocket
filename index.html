@@ -49,6 +49,17 @@
       vController.setDefaultContent(defaultContent);
       vController.updateView(vController.generateListView(pocketController.generateOutput()));
       
+      $(document).on('click', 'a', function(e) {
+        $anchor = $(this);
+        if ($anchor.hasClass("item-edit")) {
+          var id = $anchor.data('id');
+          window.location =  "edit.html?id="+id; 
+        } else if ($anchor.hasClass('item-delete')) {
+          var id = $anchor.data('id');
+          pocketController.deleteItemById(id);
+          vController.updateView(vController.generateListView(pocketController.generateOutput()));
+        }
+      });
       
       // title bar 
       $('.sub-toggle').on('click', function(e) {
