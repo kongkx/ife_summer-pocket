@@ -3,61 +3,27 @@ function ViewController(el) {
   this.defaultContent = "";
   this.parent = $('<div></div>').addClass('list').appendTo(this.$container);
   
-  this.parent.on('swipeLeft', function(e) {
-    if ($(e.target).hasClass('.list-item')) {
-      $item = $(e.target);  
-    } else {
-      $item = $(e.target).parents('.list-item');
-    }
-    if ($item.length>0) {
-      $item.addClass('slide-out').siblings().removeClass('slide-out');  
-      $(this).addClass('slide-out');
-    }
-  });
-  
-  this.parent.on('swipeRight', function(e) {
-    if ($(e.target).hasClass('.list-item')) {
-      $item = $(e.target);  
-    } else {
-      $item = $(e.target).parents('.list-item');
-    }
-    if ($item.length>0) {
-      $item.removeClass('slide-out');
-    }
-  });
-
-  this.parent.on('tap', function(e) {
-    if ($(e.target).hasClass('.list-item')) {
-      $item = $(e.target);  
-    } else {
-      $item = $(e.target).parents('.list-item');
-    }
-    if ($item.length>0) {
-      var list = $(this);
-      if (list.hasClass('slide-out')) {
-        list.removeClass('slide-out');
-        list.find('.list-item').removeClass('slide-out');
+  this.parent.on({
+    'swipeLeft': function(e) {
+      $item = $(this);
+      $item.addClass('slide-out').siblings().removeClass('slide-out');
+      $item.parent('.list').addClass('slide-out');
+    }, 
+    'swipeRight': function(e) {
+      $item = $(this);
+      if ($item.hasClass('slide-out')) {
+        $item.removeClass('slide-out');
+        $item.parent('.list').removeClass('slide-out');
       }
-    }
-  });
-  
-  this.parent.on('tap', function(e) {
-    if (e.target.tagName == "A") {
-      $anchor = $(e.target);  
-    } else {
-      $anchor = $(e.target).parent('a');
-    }
-    if ($anchor.length>0) {
-      if ($anchor.hasClass("item-edit")) {
-        var id = $anchor.data('id');
-        window.location =  "edit.html?id="+id; 
-      } else if ($anchor.hasClass('item-delete')) {
-        var id = $anchor.data('id');
-        pocketController.deleteItemById(id);
-        vController.updateView(vController.generateListView(pocketController.generateOutput()));
+    },
+    'click': function(e) {
+      if ($item.parent('.list').hasClass('slide-out')) {
+        $item.removeClass('slide-out').siblings().removeClass('slide-out');
+        $item.parent(".list").removeClass('slide-out');
       }
-    };
-  });
+    },
+  }, '.list-item');
+  
 }
 
 ViewController.prototype.generateListView = function(data) {
