@@ -152,15 +152,12 @@
     $('#edit-form').submit(function(e) {
       e.preventDefault();
       var form = this;
-      console.log(this);
       var elements = form.elements;
-      console.log(elements);
-      var code = $(this).serializeArray();
       var preprocess = {};
       var operaCode = "create";
-      if ( elements.id != "" ) {
+      if ( elements.id.value != "" ) {
         preprocess.id = elements.id.value;
-        opreaCode = "update";
+        operaCode = "update";
       }
       preprocess.categoryId = elements.category.value;
       preprocess.description = elements.description.value;

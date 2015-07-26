@@ -122,7 +122,7 @@ DataController.prototype.updateItem = function(id, obj) {
   var item = $.extend({date: Date.now()}, obj);
   var count = this.data.items.length;
   if (this.data.items.push(item)>count) {
-    this.record();  
+    this.record();
     return item.id;
   } else {
     return false;
