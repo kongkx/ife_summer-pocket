@@ -46,43 +46,6 @@
         var target = $($(this).data('target'));
         target.toggleClass('collapsed');
       });
-      $(document).on('swipeLeft', function(e) {
-        if ($(e.target).hasClass('.list-item')) {
-          $item = $(e.target);  
-        } else {
-          $item = $(e.target).parents('.list-item');
-        }
-        if ($item.length>0) {
-          $item.addClass('slide-out').siblings().removeClass('slide-out');  
-          $item.parents('.list').addClass('slide-out');
-        }
-      });
-      
-      $(document).on('swipeRight', function(e) {
-        if ($(e.target).hasClass('.list-item')) {
-          $item = $(e.target);  
-        } else {
-          $item = $(e.target).parents('.list-item');
-        }
-        if ($item.length>0) {
-          $item.removeClass('slide-out');
-        }
-      });
-      
-      $(document).on('tap', function(e) {
-        if ($(e.target).hasClass('.list-item')) {
-          $item = $(e.target);  
-        } else {
-          $item = $(e.target).parents('.list-item');
-        }
-        if ($item.length>0) {
-          var list = $item.parent('.list');
-          if (list.hasClass('slide-out')) {
-            list.removeClass('slide-out');
-            list.find('.list-item').removeClass('slide-out');
-          }
-        }
-      });
       
       $(document).on('tap', function(e) {
         if (e.target.tagName == "A") {

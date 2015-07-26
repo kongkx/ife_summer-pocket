@@ -18,8 +18,8 @@
 <body>
   <div class="menu-bar inverse">
     <div id="main-menu" class="primary">
-      <div class="left-compo collapsed">
-        <a href="" onclick="history.back();" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-icon11"></i></a>
+      <div class="left-compo">
+        <a href="#" class="moveback"><i class="iconfont icon-icon11"></i></a>
       </div>
       <div class="page-title">
         记一笔
@@ -89,114 +89,107 @@
       </footer>
     </div>
   </div>
-  <script>
-    $().ready(function() {
-      var form = $('.edit-form');
-      var selectedCateogry = 1;
-      // search string action
-      if (location.search) {
-        var paraStr = location.search.substr(1);
-        var paraArr = paraStr.split("&");
-        var paraObject = {}
-        for (var i in paraArr) {
-          var tmp = paraArr[i].split("=");
-          paraObject[tmp[0]]=tmp[1];
-        }
-      }
-      
-      if (paraObject != undefined && paraObject.id != null) {
-        var item = pocketController.getItemById(paraObject.id);
-        form.find('input[name="id"]')[0].value = item.id;
-        form.find('input[name="category"]')[0].value = item.categoryId;
-        form.find('input[name="description"]')[0].value = item.description;
-        form.find('input[name="money"]')[0].value = item.money;
-        selectedCateogry = item.categoryId;
-      }
-      
-      var options = $('.categories').find('.option');
-      
-      options.on('click', function() {
-        var option = $(this);
-        var contents = option.contents();
-        form.find('.current-category').html(option.find('i').clone());
-        form.find('.item-description')[0].placeholder=contents[2].nodeValue.trim();
-        form.find('input[name="category"')[0].value = option.data('categoryId');
-      });
-      
-      options.each(function(index) {
-        var option = $(this);
-        if (option.data('categoryId') == selectedCateogry ) {
-          option.trigger('click');
-        }
-      });
-      
-      $('#redirect').on('click', function(e) {
-        var target = $(e.target);
-        var actionCode = target.data('action');
-        if (actionCode != undefined) {
-          switch(actionCode) {
-            case "moveback":
-              window.history.back();
-              break;
-            case "another":
-              console.log(window.location);
-              window.location.replace("edit.html");
-          }
-        }
-        $(this).addClass('fade');
-      });
-      
-      $('#edit-form').submit(function(e) {
-        e.preventDefault();
-        var code = $(this).serializeArray();
-        var preprocess = {};
-        var operaCode = "create";
-        for ( var i in code) {
-          var prop = code[i]; 
-          switch(prop['name']) {
-            case 'id':
-              if (prop['value'] != "") {
-                preprocess.id = prop['value'];
-                operaCode = 'update';
-                console.log
-              }
-              break;
-            case 'category':
-              preprocess.categoryId = prop['value'];
-              break;
-            case 'description':
-              preprocess.description = prop['value'];
-              break;
-            case 'money':
-              preprocess.money = prop['value'];
-              break;
-            default: ;
-          };
-        }
-        switch(operaCode) {
-          case "create": 
-            var itemId = pocketController.addItem(preprocess);
-            break;
-          case "update":
-            var itemId = pocketController.updateItem(preprocess.id, preprocess);
-            break;
-          default:;
-        }
-        if (itemId !== false) {
-          var lastItem = pocketController.generateOutput([pocketController.getItemById(itemId)])[0];
-          var modalContent = '<div class="item category-'+ lastItem.categoryName +'">';
-          modalContent += '<i class="item-category category-icon category-'+ lastItem.categoryName +'"></i>'
-          modalContent += '<span class="item-description">' + lastItem.description + '</span>'
-          modalContent += '<span class="item-money">'+ lastItem.money +'</span>';
-          modalContent += '</div>';
-          $('#redirect').find('.modal-content').html(modalContent)
-          $('#redirect').removeClass('fade');
-        }
-        
-      });
+<script>
+  $().ready(function() {
+    $('.moveback').click(function() {
+      window.history.back();
+      return false;
     });
-    
-    
-  </script>
+    var form = $('#edit-form');
+    var editForm = document.forms['edit-form'];
+    var selectedCateogry = 1;
+    // search string action
+    if (location.search) {
+      var paraStr = location.search.substr(1);
+      var paraArr = paraStr.split("&");
+      var paraObject = {}
+      for (var i in paraArr) {
+        var tmp = paraArr[i].split("=");
+        paraObject[tmp[0]]=tmp[1];
+      }
+    }
+
+    if (paraObject != undefined && paraObject.id != null) {
+      var item = pocketController.getItemById(paraObject.id);
+      editForm.elements['id'].value = item.id;
+      editForm.elements['category'].value = item.categoryId;
+      editForm.elements['description'].value = item.description;
+      editForm.elements['money'].value = item.money;
+      selectedCateogry = item.categoryId;
+    }
+
+    var options = $('.categories').find('.option');
+    options.on('click', function() {
+      var option = $(this);
+      var contents = option.contents();
+      form.find('.current-category').html(option.find('i').clone());
+      editForm.elements['description'].placeholder = contents[2].nodeValue.trim();
+      editForm.elements['category'].value = option.data('categoryId');
+    });
+
+    options.each(function(index) {
+      var option = $(this);
+      if (option.data('categoryId') == selectedCateogry ) {
+        option.trigger('click');
+      }
+    });
+
+    $('#redirect').on('click', function(e) {
+      var target = $(e.target);
+      var actionCode = target.data('action');
+      if (actionCode != undefined) {
+        switch(actionCode) {
+          case "moveback":
+            window.history.back();
+            break;
+          case "another":
+            window.location.replace("edit.html");
+        }
+      }
+      $(this).addClass('fade');
+    });
+
+    $('#edit-form').submit(function(e) {
+      e.preventDefault();
+      var form = this;
+      console.log(this);
+      var elements = form.elements;
+      console.log(elements);
+      var code = $(this).serializeArray();
+      var preprocess = {};
+      var operaCode = "create";
+      if ( elements.id != "" ) {
+        preprocess.id = elements.id.value;
+        opreaCode = "update";
+      }
+      preprocess.categoryId = elements.category.value;
+      preprocess.description = elements.description.value;
+      preprocess.money = elements.money.value;
+
+      switch(operaCode) {
+        case "create": 
+          var itemId = pocketController.addItem(preprocess);
+          break;
+        case "update":
+          var itemId = pocketController.updateItem(preprocess.id, preprocess);
+          break;
+        default:;
+      }
+      if (itemId !== false) {
+        var lastItem = pocketController.generateOutput([pocketController.getItemById(itemId)])[0];
+        var modalContent = '<div class="item category-'+ lastItem.categoryName +'">';
+        modalContent += '<i class="item-category category-icon category-'+ lastItem.categoryName +'"></i>'
+        modalContent += '<span class="item-description">' + lastItem.description + '</span>'
+        modalContent += '<span class="item-money">'+ lastItem.money +'</span>';
+        modalContent += '</div>';
+        $('#redirect').find('.modal-content').html(modalContent)
+        $('#redirect').removeClass('fade');
+      }
+
+    });
+  });
+
+
+</script>
 </body>
 </html>

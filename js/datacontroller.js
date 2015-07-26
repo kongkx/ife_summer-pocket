@@ -1,12 +1,32 @@
-function DataController(data) {
-  this.data = $.extend(DataController.DEFAULT,data);
+var categories = [
+  {cid: '1', categoryName: 'income', categoryTitle: '收入', type: 'income'},  // custom hexcode and icon maybe.
+  {cid: '2', categoryName: 'clothes', categoryTitle: '衣服', type: 'payment'},
+  {cid: '3', categoryName: 'eating', categoryTitle: '饮食', type: 'payment'},
+  {cid: '4', categoryName: 'house', categoryTitle: '住宿', type: 'payment'},
+  {cid: '5', categoryName: 'transport', categoryTitle: '交通', type: 'payment'},
+  {cid: '6', categoryName: 'shopping', categoryTitle: '购物', type: 'payment'},
+  {cid: '7', categoryName: 'others', categoryTitle: '其他', type: 'payment'},
+];
+
+function DataController(data, storage) {
+  if (data != null || data != undefined) {
+    this.data = data;
+  } else {
+    this.data = DataController.DEFAULT;
+  }
+  
+  if (storage != undefined) {
+    this.storage = storage;
+  } else {
+    this.storage = "data";
+  }
 }
 
 DataController.DEFAULT = {
   items: [],
-  categories: [],
+  categories: categories,
   itemCount: 0,
-  categoryCount: 0,
+  categoryCount: categories.length,
 }
 
 DataController.prototype.getItemById = function(id) {
@@ -121,7 +141,7 @@ DataController.prototype.deleteItemById = function(id) {
 }
 
 DataController.prototype.record = function() {
-    localStorage.setItem('pocketData', JSON.stringify(this.data));
+  localStorage.setItem(this.storage, JSON.stringify(this.data));
 }
 
 DataController.prototype.generateOutput = function(data) {
