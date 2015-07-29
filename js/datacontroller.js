@@ -1,3 +1,13 @@
+//Filename: datacontroller.js
+//Description: 处理数据的增删改查
+//----------------------------------------我是分隔线-------------------------
+
+/*
+ * cid: 分类ID
+ * categoryName: 分类机读名
+ * categoryTitle: 分类名
+ * type: 分类类型 incom | payment
+ */
 var categories = [
   {cid: '1', categoryName: 'income', categoryTitle: '收入', type: 'income'},  // custom hexcode and icon maybe.
   {cid: '2', categoryName: 'clothes', categoryTitle: '衣服', type: 'payment'},
@@ -8,6 +18,11 @@ var categories = [
   {cid: '7', categoryName: 'others', categoryTitle: '其他', type: 'payment'},
 ];
 
+/*
+ * DataController构造函数
+ * @param {obj} data
+ * @param {str} storage  | default: data;
+ */
 function DataController(data, storage) {
   if (data != null || data != undefined) {
     this.data = data;
@@ -22,6 +37,9 @@ function DataController(data, storage) {
   }
 }
 
+/**
+ * DataController 缺省参数
+ */
 DataController.DEFAULT = {
   items: [],
   categories: categories,
@@ -29,49 +47,79 @@ DataController.DEFAULT = {
   categoryCount: categories.length,
 }
 
+/**
+ * 根据id获取账单项目
+ * @param {int} id
+ * @return {obj} item
+ */
 DataController.prototype.getItemById = function(id) {
   var items = this.data.items;
   for (var i in items) {
     if (items[i].id == id) {
-      var tmp = $.extend(true, {}, items[i]);
-      var category = this.getCategoryById(tmp.categoryId);
-      tmp.categoryTitle = category.categoryTitle;
-      return tmp; 
+      var item = $.extend(true, {}, items[i]);
+      return item; 
     }
   }
 }
 
+/**
+ * 根据属性获取账单项目
+ * @param {str} prop
+ * @param {str} value
+ * return {array} item_collection
+ */
 DataController.prototype.getItemsByProperty = function(prop, value) {
   var results = [];
   var items = this.data.items;
   for (var i in items) {
     if (items[i][prop] == value) {
-      results.push(items[i]);
+      var tmp = $.extend(true, {}, items[i]);
+      results.push(tmp);
     }
   }
   return results;
 }
 
+/** 
+ * 根据分类获取项目对象
+ * @param {int} id
+ * @return {array} item_collection
+ */
 DataController.prototype.getItemsByCategory = function(id) {
   return this.getItemsByProperty('cid', id);
 }
 
-DataController.prototype.getCategoryById = function(id) {
+/**
+ * 根据cid获取分类
+ * @param {int} cid
+ * @return {obj} category
+ */
+DataController.prototype.getCategoryById = function(cid) {
   var categories = this.data.categories;
   for (var i in categories) {
-    if (categories[i].cid == id) {
-      return categories[i]; 
+    if (categories[i].cid == cid) {
+      return $.extend(true, {}, categories[i]); 
     }
   }
 }
 
-DataController.prototype.getCategoryTitle = function(id) {
-  var category = this.getCategoryById(id);
+/** 
+ * 获取分类名称
+ * @param {int} cid
+ * @return {str} categoryTitle
+ */
+DataController.prototype.getCategoryTitle = function(cid) {
+  var category = this.getCategoryById(cid);
   if (category) {
     return category.categoryTitle;
   }
 }
 
+/**
+ * 获取分类机读名
+ * @param {int} cid
+ * @return {str} categoryName
+ */
 DataController.prototype.getCategoryName = function(id) {
   var category = this.getCategoryById(id);
   if (category) {
@@ -79,16 +127,24 @@ DataController.prototype.getCategoryName = function(id) {
   }
 }
 
-DataController.prototype.getCategoryType = function(id) {
-  var category = this.getCategoryById(id);
+/**
+ * 获取分类类型
+ * @param {int} cid
+ * @return {str} categoryType
+ */
+DataController.prototype.getCategoryType = function(cid) {
+  var category = this.getCategoryById(cid);
   if (category) {
     return category.type;
   }
 }
-
-
-DataController.prototype.getMoneyPrefix = function(id) {
-  var category = this.getCategoryById(id)
+/**
+ * 根据分类类型生产前缀
+ * @param {int} cid
+ * @return {str} prefix
+ */
+DataController.prototype.getMoneyPrefix = function(cid) {
+  var category = this.getCategoryById(cid)
   if (category) {
     switch (category.type) {
       case 'income':
@@ -102,6 +158,11 @@ DataController.prototype.getMoneyPrefix = function(id) {
   }
 }
 
+/**
+ * 添加账目
+ * @param {obj} item;
+ * @return {int} new Id;
+ */
 DataController.prototype.addItem = function(obj) {
   var item = $.extend({id: this.data.itemCount+1, date: Date.now() }, obj);
   var before = this.data.items.length;
@@ -117,6 +178,12 @@ DataController.prototype.addItem = function(obj) {
   }
 }
 
+/**
+ * 更新账目
+ * @param {int} id;
+ * @param {obj} item;
+ * @return {int} updated id;
+ */
 DataController.prototype.updateItem = function(id, obj) {
   this.deleteItemById(id);
   var item = $.extend({date: Date.now()}, obj);
@@ -129,6 +196,10 @@ DataController.prototype.updateItem = function(id, obj) {
   }
 }
 
+/**
+ * 删除账目
+ * @param {int} id;
+ */
 DataController.prototype.deleteItemById = function(id) {
   var items = this.data.items;
   for (var i in items) {
@@ -139,11 +210,25 @@ DataController.prototype.deleteItemById = function(id) {
   }
   this.record();
 }
-
+/**
+ * 数据存档
+ */
 DataController.prototype.record = function() {
   localStorage.setItem(this.storage, JSON.stringify(this.data));
 }
 
+/**
+ * 生成输出数据
+ * @param {array} data 
+ * @return {array} output
+ * output item: {id:id, 
+ *               date: dateStr, 
+ *               description: description,
+ *               money: prefixed_money,
+ *               categoryId: cid, 
+ *               categoryTitle: cTitle, 
+ *               categoryName: cName, }
+ */
 DataController.prototype.generateOutput = function(data) {
   if (data == undefined) {
     data = this.data.items;  
@@ -167,6 +252,11 @@ DataController.prototype.generateOutput = function(data) {
   return output;
 }
 
+/**
+ * 时间自定义样式输出
+ * @param {date} obj;
+ * @return {str} dateString
+ */
 function _customDateString(obj, format) {
   // to-be-done: some regexp need to match the format
   var tmpStr = obj.toLocaleString();

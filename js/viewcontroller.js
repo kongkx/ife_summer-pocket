@@ -1,8 +1,17 @@
+//Filename: viewcontroller.js
+//Description: 视图控制器
+//----------------------------------------我是分隔线-------------------------
+
+/**
+ * ViewController 构造函数
+ * @param {str} el;
+ */
 function ViewController(el) {
   this.$container = $(el);
   this.defaultContent = "";
   this.parent = $('<div></div>').addClass('list').appendTo(this.$container);
   
+  // 视图内容绑定
   this.parent.on({
     'swipeLeft': function(e) {
       $item = $(this);
@@ -26,12 +35,17 @@ function ViewController(el) {
   
 }
 
+/** 
+ * 生成列表HTML
+ * @param {array} data
+ * @return {str} html
+ */
 ViewController.prototype.generateListView = function(data) {
   if (data == false) {
     return "";
   }
   
-  htmlCode = [];
+  var htmlCode = [];
   
   for (var i in data) {
     itemdata = data[i];
@@ -51,6 +65,10 @@ ViewController.prototype.generateListView = function(data) {
   return htmlCode.join(" ");
 }
 
+/**
+ * 更新视图内容
+ * @param {str} data
+ */
 ViewController.prototype.updateView = function(data) {
   if (data == false) {
     this.parent.html(this.defaultContent);
@@ -59,6 +77,10 @@ ViewController.prototype.updateView = function(data) {
   }
 }
 
+/**
+ * 设置视图默认内容
+ * @param {str} str
+ */
 ViewController.prototype.setDefaultContent = function(str) {
   this.defaultContent =  str;
 }
