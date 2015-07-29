@@ -84,7 +84,7 @@
       <input type="text" hidden name="id">
       <input type="text" hidden name="category" id="category" >
       <input type="text" class="item-description" placeholder="" name="description">
-      <input id="input-box" type="number" class="item-money" name="money" placeholder="0.00" required>
+      <input id="input-box" type="text" class="item-money" name="money" value="0" readonly="readonly" required>
       </div>
       </form>
       <table class="keyboard">
@@ -318,7 +318,7 @@ function operator(type)
           _string.push(input.value);
           _type="plus"
           input.value="+";
-          input.name="type";
+          input.name="money";
         }
         break;
     case "minus":
@@ -327,7 +327,7 @@ function operator(type)
           _string.push(input.value);
           _type="minus"
           input.value="-";
-          input.name="type";
+          input.name="money";
         }
         break;
     case "multiply":
@@ -336,7 +336,7 @@ function operator(type)
           _string.push(input.value);
           _type="multiply"
           input.value="×";
-          input.name="type";
+          input.name="money";
         }
         break;
     case "divide":
@@ -345,7 +345,7 @@ function operator(type)
           _string.push(input.value);
           _type="divide"
           input.value="÷";
-          input.name="type";
+          input.name="money";
         }
         break;
     case "result":
