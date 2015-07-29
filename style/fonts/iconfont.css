@@ -16,7 +16,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 .icon-jian:before { content: "\e600"; }
-.icon-bianji:before { content: "\e62a"; }
+.icon-bianji:before { content: "\e62a"; font-size: 26px;}
 .icon-yiban:before { content: "\e601"; }
 .icon-canyin:before { content: "\e602"; }
 .icon-gouwu:before { content: "\e603"; }
