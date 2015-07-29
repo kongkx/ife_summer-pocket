@@ -111,7 +111,7 @@
             <td><div onclick="operator('clear')">c</div></td>
             <td><div onclick="typetoinput('0')">0</div></td>
             <td><div onclick="typetoinput('.')">.</div></td>
-            <td id="toggle-save" style="color: #e66b14;"><button data-toggle="modal" data-target="#redirect" id="save" type="submit" form="edit-form">ok</button></td>
+            <td id="toggle-save" style="color: #e66b14;"><div onclick="operator('result')">=</div></td>
           </tr>
         </tbody>
       </table>
@@ -241,7 +241,7 @@ var _type;
 function typetoinput(num)
 {
   input=document.getElementById("input-box");
-  if(input.name=="type")
+  if(input.name=="money")
   {
     input.value=" ";
     input.name=" ";
@@ -359,22 +359,22 @@ function operator(type)
           if(_type=="plus")
             {
               input.value=parseFloat(result(_string)[0])+parseFloat(result(_string)[1]);              
-              input.name="type"
+              input.name="money"
             }
             else if(_type=="minus")
             {
               input.value=parseFloat(result(_string)[0])-parseFloat(result(_string)[1]);              
-              input.name="type"
+              input.name="money"
             }
             else if(_type=="multiply")
             {
               input.value=parseFloat(result(_string)[0])*parseFloat(result(_string)[1]);              
-              input.name="type"
+              input.name="money"
             }
             else if(_type=="divide")
             {
               input.value=parseFloat(result(_string)[0])/parseFloat(result(_string)[1]);              
-              input.name="type"
+              input.name="money"
             }
           break;
         }
