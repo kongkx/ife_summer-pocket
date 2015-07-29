@@ -77,7 +77,8 @@ a {
   }
   .secondory {
     padding: 13px 10px;
-    transition: all .4s ease;
+    -webkit-transition: all .25s ease-out;
+    transition: all .25s ease-out;
     overflow: hidden;
     &.collapsed {
       padding: 0px 10px;
@@ -142,7 +143,9 @@ a {
     padding: 10px 0;
     line-height: $icon-height;
     vertical-align: middle;
-    transition: all .4s ease;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    
     &:nth-child(odd) {
       background-color: white;
     }
