@@ -66,7 +66,7 @@ DataController.prototype.getItemById = function(id) {
  * 根据属性获取账单项目
  * @param {str} prop
  * @param {str} value
- * return {array} item_collection
+ * @return {array} item_collection
  */
 DataController.prototype.getItemsByProperty = function(prop, value) {
   var results = [];
