@@ -228,7 +228,7 @@ DataController.prototype.record = function() {
  *               categoryId: cid, 
  *               categoryTitle: cTitle, 
  *               categoryName: cName, }
- */
+*/
 DataController.prototype.generateOutput = function(data) {
   if (data == undefined) {
     data = this.data.items;  
