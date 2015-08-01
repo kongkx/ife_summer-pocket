@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no"> 
+  <title>Test Pocket</title>
+  <link rel="stylesheet" href="style/fonts/iconfont.css">
+  <link rel="stylesheet" href="style/main.css">
+  <script src="js/zepto.js"></script>
+  <script src="js/touch.js"></script>
+  <script src="js/datacontroller.js"></script>
+  <script src="js/viewcontroller.js"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <div class="menu-bar">
+    <div id="main-menu" class="primary">
+      <div class="left-compo collapsed">
+        <a href="#" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-list"></i></a>
+      </div>
+      <div class="page-title">
+        记账本
+      </div>
+      <div class="right-compo">
+        <a href="edit.html"><i class="iconfont icon-bianji"></i></a>
+      </div>
+    </div>
+    <div id="navigation" class="secondory collapsed clearfix">
+      <a class="active" href="#/list-view">账目列表</a>
+      <a href="statistics.html">账目统计</a>
+      <a href="#/graph-view">账目图表</a>
+    </div>
+  </div>  
+  <div class="main-container">
+    test
+  </div>
+  <script>
+    $().ready(function() {
+      col = new DataCollection({data: demoData, accumulator: demoData.length});
+      // view controller init;
+      vController = new ViewController('.main-container');
+
+      var defaultContent = '<div class="jumbotron ">';
+      defaultContent += '<p>亲，你的账本还没有账目哦。<p></p>新建的账目试试吧</p>';
+      defaultContent += '<a href="edit.html" class="btn btn-primary btn-lg" data-action="edit" data-id="new">新建账目</a>';
+      defaultContent += '</div>';
+
+      vController.setDefaultContent(defaultContent);
+      
+      // initView
+      vController.updateView(vController.generateListView(pocketData.generateOutput()));
+      
+      $('.sub-toggle').on('click', function(e) {
+        e.preventDefault();
+        var target = $($(this).data('target'));
+        target.toggleClass('collapsed');
+      });
+      
+      $('.list-item').on('swipeLeft', function() {
+        $(this).addClass('slide-out').siblings().removeClass('slide-out');
+        $(this).parent('.list').addClass('slide-out');
+      });
+      $('.list-item').on('swipeRight', function() {
+        $(this).removeClass('slide-out');
+      });
+      $('.list-item').on('tap', function() {
+        var list = $(this).parent('.list');
+        if (list.hasClass('slide-out')) {
+          $(this).removeClass('slide-out');
+          list.removeClass('slide-out');
+        }
+      });
+      $('.item-edit').click(function() {
+        var id = $(this).data('id');
+        window.location =  "edit.html?id="+id; 
+      });
+      $('.item-delete').click(function() {
+        var id = $(this).data('id');
+        pocketData.deleteItemById(id);
+        vController.updateView(vController.generateListView(pocketData.generateOutput()));
+      });
+    });
+  </script>
+</body>
+</html>
