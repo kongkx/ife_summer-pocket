@@ -55,29 +55,35 @@ a {
   color: white;
   z-index: 500;
   .primary {
-    display: -webkit-flex;
-    display: flex;
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+//    display: -webkit-flex;
+//    display: flex;
     align-items: center;
     padding: 0 10px;
     border-bottom: 1px solid rgba(255,255,255,0.3); 
     height: $bar-height;
     line-height: $bar-height;
     
-    .left-compo{
+    .left-compo,
+    .right-compo{
+      display:table-cell;
       width: 60px;
     }
     .right-compo {
-      width: 60px;
       text-align: right;
     }
     .page-title {
       margin: auto;
       font-size: 18px;
+      text-align: center;
     }
   }
   .secondory {
     padding: 13px 10px;
     transition: all .4s ease;
+    -webkit-transition: all .4s ease;
     overflow: hidden;
     &.collapsed {
       padding: 0px 10px;
@@ -271,7 +277,7 @@ a {
 }
 .edit-form {
   position: fixed;
-  bottom: 1px;
+  bottom: 0px;
   width: 100%;
   box-sizing: border-box;
   line-height: 40px;
@@ -279,19 +285,47 @@ a {
   background-color:#f8f8f8;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  .form-group{
-    display: flex;
-    display: -webkit-flex;
-  }
   
-  .current-category {
-    flex: 0 0 50px;
-    -webkit-flex: 0 0 50px;
+  .form-group{
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .item-category,
+  .item-description,
+  .item-money {
+    display: table-cell;
+    padding: 0 5px;
+  }
+  .item-category {
+    display: table-cell;
+    position: relative;
+    width: 50px;
     box-sizing: border-box;
     text-align: center;
+    i {
+      position: relative;
+      top: -2px;
+    }
   }
+  .item-description {
+    border:none;
+    background:transparent;
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .item-money {
+    max-width: 100px;
+    text-align: right;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  
   input {
-    font-size: 1.25em; 
+    width: inherit;
+    max-width: inherit;
+    font-size: 1.25em;
     border:none;
     background:transparent;
     box-sizing: border-box;
@@ -302,22 +336,8 @@ a {
       background-color: #ddd;
     }
   }
-  .item-description {
-    flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
-    font-size: 1.25em; 
-    border:none;
-    background:transparent;
-    width: 100%;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 8px 3px;
-  }
-  .item-money {
-    flex: 1 1 50%;
-    -webkit-flex: 1 1 50%;
+  input[name="money"] {
     text-align: right;
-    max-width: 180px;
   }
 }
 

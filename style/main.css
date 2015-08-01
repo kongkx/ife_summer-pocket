@@ -26,24 +26,28 @@ a {
   color: white;
   z-index: 500; }
   .menu-bar .primary {
-    display: -webkit-flex;
-    display: flex;
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
     align-items: center;
     padding: 0 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     height: 45px;
     line-height: 45px; }
-    .menu-bar .primary .left-compo {
+    .menu-bar .primary .left-compo,
+    .menu-bar .primary .right-compo {
+      display: table-cell;
       width: 60px; }
     .menu-bar .primary .right-compo {
-      width: 60px;
       text-align: right; }
     .menu-bar .primary .page-title {
       margin: auto;
-      font-size: 18px; }
+      font-size: 18px;
+      text-align: center; }
   .menu-bar .secondory {
     padding: 13px 10px;
-    transition: all .4s ease;
+    transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease;
     overflow: hidden; }
     .menu-bar .secondory.collapsed {
       padding: 0px 10px;
@@ -97,7 +101,7 @@ a {
     padding: 10px 0;
     line-height: 40px;
     vertical-align: middle;
-    transition: all .4s ease; }
+    transition: all 0.4s ease; }
     .list .list-item:nth-child(odd) {
       background-color: white; }
     .list .list-item:nth-child(even) {
@@ -180,6 +184,7 @@ a {
 .categories .option-group {
   background-color: white;
   border-bottom: 1px solid #eee; }
+
 .categories .option {
   display: inline-block;
   width: 50px;
@@ -193,7 +198,7 @@ a {
 
 .edit-form {
   position: fixed;
-  bottom: 1px;
+  bottom: 0px;
   width: 100%;
   box-sizing: border-box;
   line-height: 40px;
@@ -202,14 +207,37 @@ a {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee; }
   .edit-form .form-group {
-    display: flex;
-    display: -webkit-flex; }
-  .edit-form .current-category {
-    flex: 0 0 50px;
-    -webkit-flex: 0 0 50px;
+    display: table;
+    width: 100%;
+    box-sizing: border-box; }
+  .edit-form .item-category,
+  .edit-form .item-description,
+  .edit-form .item-money {
+    display: table-cell;
+    padding: 0 5px; }
+  .edit-form .item-category {
+    display: table-cell;
+    position: relative;
+    width: 50px;
     box-sizing: border-box;
     text-align: center; }
+    .edit-form .item-category i {
+      position: relative;
+      top: -2px; }
+  .edit-form .item-description {
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px; }
+  .edit-form .item-money {
+    max-width: 100px;
+    text-align: right;
+    padding-top: 8px;
+    padding-bottom: 8px; }
   .edit-form input {
+    width: inherit;
+    max-width: inherit;
     font-size: 1.25em;
     border: none;
     background: transparent;
@@ -219,21 +247,8 @@ a {
     .edit-form input:focus {
       outline: none;
       background-color: #ddd; }
-  .edit-form .item-description {
-    flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
-    font-size: 1.25em;
-    border: none;
-    background: transparent;
-    width: 100%;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 8px 3px; }
-  .edit-form .item-money {
-    flex: 1 1 50%;
-    -webkit-flex: 1 1 50%;
-    text-align: right;
-    max-width: 180px; }
+  .edit-form input[name="money"] {
+    text-align: right; }
 
 /* style for modal component */
 .modal {
@@ -343,7 +358,7 @@ a {
 .panel-body {
   height: 100%;
   overflow: hidden;
-  transition: height .4s ease; }
+  transition: height 0.4s ease; }
   .panel-body .list .list-item .item {
     line-height: 24px; }
     .panel-body .list .list-item .item .item-money {
@@ -352,5 +367,3 @@ a {
       padding-left: 40px; }
     .panel-body .list .list-item .item .item-date {
       padding-right: 40px; }
-
-/*# sourceMappingURL=main.css.map */
