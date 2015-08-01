@@ -11,8 +11,8 @@ gulp.task('sass', function() {
   return gulp.src('sass/*.scss').pipe(sass()).pipe(gulp.dest('style'));
 });
 
-gulp.task('copy-index', function() {
-  return gulp.src('index.html').pipe(gulp.dest('dist'));
+gulp.task('copy-html', function() {
+  return gulp.src(['./*.html','!test.html']).pipe(gulp.dest('dist'));
 });
 
 gulp.task('copy-style', function() {
@@ -31,16 +31,16 @@ gulp.task('copy-script', function() {
 gulp.task('browser-sync', function() {
   browserSync({
     server: {
-      base: 'dist'
+      base: './dist/'
     }
   });
   gulp.watch('dist/**/*.*').on('change', browserSync.reload);
 });
 
-gulp.task('dis', ['copy-index', 'copy-style', 'copy-script']);
+gulp.task('dis', ['copy-html', 'copy-style', 'copy-script']);
 
 gulp.task('default',['browser-sync'], function() {
-  gulp.watch('index.html', ['copy-index']);
+  gulp.watch('./*.html', ['copy-html']);
   gulp.watch('sass/*.scss', ['sass']);
   gulp.watch('js/*js', ['copy-script']);
   gulp.watch('style/*.css', ['copy-style']);
