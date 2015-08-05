@@ -244,19 +244,23 @@ DataController.prototype.outputAll = function(name) {
  : example: {name:'item', filter: {categoryId: 1}, order:{key:date, type: 'desc'}}
  * @output {array} outputItemArr | 输出项目数组
  * note: 考虑修改
- * ----filter的值分为两种情况判断，分别调用_getByProperty, _getByRange两个方法，格式: value | bValue:eValue;----
+ * ----filter的值分为两种情况判断，分别调用_getByProperty, _getByRange两个方法，格式: a,b,c | a:c;
  */
 DataController.prototype.query = function(opts) {
   var datas = this.outputAll(opts.name);
   if (opts.filter != undefined) {
     var filters = opts.filter;
     for (var key in filters) {
-      if (key == "date") {
-        datas = _getByDate(datas, filters[key]);
-      } else if (key == "month") {
-        datas = _getByMonth(datas, filters[key]);
+      if(/^[\w-]:[\w-]$/.test(filters[key])) {
+        var beValues = filters[key].split(":");
+        datas = _getByRange(datas, key, beValues[0], beValues[1]);
       } else {
-        datas = _getByProperty(datas, key, filters[key]);  
+        var values = filters[key].split(",");
+        var tmp = [];
+        for (var i in values) {
+          tmp = tmp.concat(_getByProperty(datas, key, values[i]));
+        }
+        datas = tmp;
       }
     }
   }
@@ -311,7 +315,7 @@ function _getByProperty(datas, property, value) {
 function _getByRange(datas, property, bValue, eValue) {
   var result = [];
   for (var i in datas) {
-    if (datas[i][property] >= bValue && datas[i][property] < eValue) {
+    if (datas[i][property] >= bValue && datas[i][property] <= eValue) {
       result.push(datas[i]);  
     }
   }
@@ -352,14 +356,4 @@ function _getByMonth(datas, value) {
   return _getByRange(datas, "date", bDate, eDate);
 }
 
-/**
- * 自定义时间字符处输出
- * @param {date} obj
- * @param {str} format
- * @return {str} dateStr
- */
-function _customDateString(obj, format) {
-  // to-be-done: some regexp need to match the format
-  var tmpStr = obj.toLocaleString();
-  return obj.toLocaleDateString();
-}
+
