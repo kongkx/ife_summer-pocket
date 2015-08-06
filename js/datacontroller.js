@@ -215,7 +215,7 @@ DataController.prototype.output = function(name, id) {
   for (var key in joinSettings) {
     var para = joinSettings[key];
     var joinObj = this.output(para, output[key])[0];
-    delete joinObj[para[1]];
+    delete joinObj.id;
   }
   output = $.extend(output, joinObj);
   return [output];
@@ -285,42 +285,44 @@ DataController.prototype.query = function(opts) {
     });
   }
   return datas;
+  
+  /**
+   * 通过属性值过滤数组对象
+   * @param {array} datas
+   * @param {str} property | 过滤的对象属性名称
+   * @param {str} value | 匹配的属性名称
+   * @return {array} result 
+   */
+  function _getByProperty(datas, property, value) {
+    var result = [];
+    for (var i in datas) {
+      if (datas[i][property] == value) {
+        result.push(datas[i]);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * 通过区域过滤对象数组
+   * @param {array} datas
+   * @param {str} property | 过滤的对象属性名称
+   * @param {str} bValue | 过滤值下限（包含该值）
+   * @param {str} eValue | 过滤值上限（不包含该值）
+   * @return {array} result
+   */
+  function _getByRange(datas, property, bValue, eValue) {
+    var result = [];
+    for (var i in datas) {
+      if (datas[i][property] >= bValue && datas[i][property] <= eValue) {
+        result.push(datas[i]);  
+      }
+    }
+    return result;
+  }
 }
 
-/**
- * 通过属性值过滤数组对象
- * @param {array} datas
- * @param {str} property | 过滤的对象属性名称
- * @param {str} value | 匹配的属性名称
- * @return {array} result 
- */
-function _getByProperty(datas, property, value) {
-  var result = [];
-  for (var i in datas) {
-    if (datas[i][property] == value) {
-      result.push(datas[i]);
-    }
-  }
-  return result;
-}
 
-/**
- * 通过区域过滤对象数组
- * @param {array} datas
- * @param {str} property | 过滤的对象属性名称
- * @param {str} bValue | 过滤值下限（包含该值）
- * @param {str} eValue | 过滤值上限（不包含该值）
- * @return {array} result
- */
-function _getByRange(datas, property, bValue, eValue) {
-  var result = [];
-  for (var i in datas) {
-    if (datas[i][property] >= bValue && datas[i][property] <= eValue) {
-      result.push(datas[i]);  
-    }
-  }
-  return result;
-}
 
 /**
  * 通过日期获取对象数组
