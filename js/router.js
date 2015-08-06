@@ -1,3 +1,8 @@
+/**
+ * 自定义router
+ * el 设置router绑定元素
+ * @param {str} el 
+ */
 function MyRouter(el) {
   if (el == undefined) {
     this.$el = $('body');  
@@ -13,22 +18,17 @@ function MyRouter(el) {
 
 MyRouter.prototype.init = function() {
   var router = this;
-  $(document).on('click', function(e) {
-    if (e.target.tagName == "A") {
-      $anchor = $(e.target);  
-    } else {
-      $anchor = $(e.target).parents('a');
-    }
-    if ($anchor.length != 0 && $anchor[0].hash.substr(0,1) == "#") {
+  $(document).on('click', 'a', function(e) {
+    if (this.hash.substr(0,1) == "#") {
       e.preventDefault();
-      var hash = $anchor[0].hash;
+      var hash = this.hash;
       router.load(hash);
     }
   });
 }
 
 MyRouter.prototype.load = function(hash) {
-  // hash pattern: #/actionType:type?searchCode
+  // hash pattern: #/actionType:code?searchCode
   // #/action:edit?name=item&id=1
   // #/action:delete?name=item&id=2
   // #/view:list-view?filter=123
@@ -45,18 +45,32 @@ MyRouter.prototype.load = function(hash) {
     baseCode = actionCode.substr(0, spliterIndex);
   }
   
+  if (para != "") {
+    var paraStr = para.substr(1);
+    var paraArr = paraStr.split("&");
+    var paraObj = {}
+    for (var i in paraArr) {
+      var tmp = paraArr[i].split("=");
+      paraObj[tmp[0]]=tmp[1];
+    }
+  }
+  
+  
+  
   var opts = router.actions[actionType][baseCode];
   
   if (opts.templateURL !== undefined) {
     router.$el.load(opts.templateURL, function() {
       if (opts.controller != undefined && router.controllers[opts.controller] != undefined) {
-        router.controllers[opts.controller].apply(router, [baseCode, para]);  
+        router.controllers[opts.controller].call(router, paraObj);  
       }
     });
   } else if (opts.controller != undefined && router.controllers[opts.controller] != undefined) {
-    router.controllers[opts.controller].apply(router, [baseCode, para]);  
+    router.controllers[opts.controller].call(router, paraObj);  
   }
 }
+
+
 
 MyRouter.prototype.addAction = function(type, code, opts) {
   if (this.actions[type] == undefined) {
@@ -64,6 +78,15 @@ MyRouter.prototype.addAction = function(type, code, opts) {
   }
   this.actions[type][code] = opts;
   return this;
+}
+
+// may change to plugin form 
+MyRouter.prototype.addPlugin = function(name, opts) {
+  if (this.plugins[name] == undefined) {
+    this.plugins[name] == opts;
+  } else {
+    console.log("Plugin "+name+ "is already defined, please use another name");  
+  }
 }
 
 // opts: templateurl, opts: controller;
