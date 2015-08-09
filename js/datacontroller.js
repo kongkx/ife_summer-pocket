@@ -208,6 +208,7 @@ DataController.prototype.addJoin = function(left, right) {
  * @param {str} name | 数据集名称
  * @param {int} id | 项目id
  * @return {array} outputItemArr | 输出项目数组
+ * need_to_be_done: rewrite join, use loop maybe.
  */
 DataController.prototype.output = function(name, id) {
   var output = this.getItemById(name, id)[0];
@@ -236,7 +237,6 @@ DataController.prototype.outputAll = function(name) {
   return output;
 }
 
-
 /**
  * 包含数据连接的数据输出，输出项目组
  * @param {obj} opts | 参数对象
@@ -251,7 +251,7 @@ DataController.prototype.query = function(opts) {
   if (opts.filter != undefined) {
     var filters = opts.filter;
     for (var key in filters) {
-      if(/^[\w-]:[\w-]$/.test(filters[key])) {
+      if(/^[\w-]*:[\w-]*$/.test(filters[key])) {
         var beValues = filters[key].split(":");
         datas = _getByRange(datas, key, beValues[0], beValues[1]);
       } else {
@@ -322,29 +322,25 @@ DataController.prototype.query = function(opts) {
   }
 }
 
-
-
 /**
  * 通过日期获取对象数组
  * @param {array} datas | 原对象数组
  * @param {str} value | 日期字符串
  * @return {array} result 
  */
-function _getByDate(datas, value) {
-  var result = [];
+DataController.prototype.getByDate = function(name, value) {
   var bDate = new Date(value).getTime();
   var eDate = bDate + 24*60*60*1000;
-  return _getByRange(datas, "date", bDate, eDate);
+  return this.query({name: name, filter: {date: bDate+":"+eDate}});
 }
 
 /** 
  * 通过月份获取对象数组
- * @param {array} datas | 原对象数组
+ * @param {str} name | 数据表名称
  * @param {str} value | 月份，格式： "yyyy-MM"
- * @return {array} result | 对象数组
  */
-function _getByMonth(datas, value) {
-  var result = [];
+
+DataController.prototype.getByMonth = function(name, value) {
   var atoms = value.split("-");
   if (atoms[1] == 12) {
     atoms[0]++;
@@ -353,9 +349,9 @@ function _getByMonth(datas, value) {
     atoms[1]++;  
   }
   var bDate = new Date(value).getTime();
-  var eDate = new Date(atoms.join("-")).getTime();
+  var eDate = new Date(atoms.join("-")).getTime() - 1;
   
-  return _getByRange(datas, "date", bDate, eDate);
+  return this.query({name: name, filter: {date: bDate+":"+eDate}});
 }
 
 
