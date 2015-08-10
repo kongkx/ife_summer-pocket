@@ -78,6 +78,21 @@ a {
       margin: auto;
       font-size: 18px;
       text-align: center;
+      position: relative;
+      
+      .dropdown {
+        position: absolute;
+        top: 47px;
+        width: 100%;
+        background-color: $primary-color;
+        ul {
+          padding: 0;
+        }
+        li {
+          list-style: none;  
+          border-bottom: 1px dashed lighten($primary-color, 20%);
+        }
+      }
     }
   }
   .secondory {
@@ -209,47 +224,19 @@ a {
 /* category icon */
 .category-icon {
   font-style: normal;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color:$income-color;
+  border-radius: 50%;
+  vertical-align: middle;
+  text-align: center;
   &:before {
-    content: "";
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background-color:$income-color;
-    border-radius: 50%;
-    vertical-align: middle;
-    text-align: center;
+    
     color: white;
     line-height: 40px;
     font-size:28px;
     font-family:"iconfont" !important;
-  }
-  &.category-income:before {
-    content: $category-income-icon;
-    background-color: $income-color;
-  }
-  &.category-clothes:before {
-    content: $category-clothes-icon;
-    background-color: $clothes-color;
-  }
-  &.category-eating:before {
-    content: $category-eating-icon;
-    background-color: $eating-color;
-  }
-  &.category-house:before {
-    content: $category-house-icon;
-    background-color: $house-color;
-  }
-  &.category-transport:before {
-    content: $category-transport-icon;
-    background-color: $transport-color;
-  }
-  &.category-shopping:before {
-    content: $category-shopping-icon;
-    background-color: $shopping-color;
-  }
-  &.category-others:before {
-    content: $category-others-icon;
-    background-color: $others-color;
   }
 }
 
@@ -275,7 +262,7 @@ a {
     }
   }
 }
-.edit-form {
+#edit-form {
   position: fixed;
   bottom: 0px;
   width: 100%;
@@ -504,4 +491,67 @@ a {
       }
     }
   }
+}
+
+// total_statistics
+section.statistics {
+  padding: 15px 0px;
+  border-bottom: 1px solid #ddd;
+  
+  h3 {
+    display: none;  
+  }
+  
+  .echart {
+    height: 200px;  
+  }
+}
+
+#total_stat {
+  ul {
+    display: table;
+    width: 100%;
+    padding: 0;
+  }
+  
+  li {
+    display: table-cell;
+    text-align: center;
+    border-right: 1px solid #ddd;
+    
+    .title {
+      display: block;
+      width: 100%;
+      color: #666;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+    .total-income,
+    .total-payment,
+    .total-surplus {
+      display: block;
+      font-size: 20px;
+      
+      &:before {
+        content: "￥";  
+      }
+    }
+    
+    .total-income {
+      color: $primary-color;
+    }
+    .total-payment {
+      color: $alert-color;  
+    }
+    .total-surplus {
+      color: #444;  
+    }
+  }
+  li:last-child {
+    border: none;
+  }
+}
+
+#ip_line {
+  height: 300px;  
 }

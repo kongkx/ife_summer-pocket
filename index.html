@@ -8,16 +8,14 @@
   <title>Document</title>
   <link rel="stylesheet" href="style/fonts/iconfont.css">
   <link rel="stylesheet" href="style/main.css">
+  <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
   <script src="js/zepto.js"></script>
   <script src="js/touch.js"></script>
+  <script src="js/menubar.js"></script>
   <script src="js/router.js"></script>
   <script src="js/datacontroller.js"></script>
-  <script src="js/views.js"></script>
   <script src="js/demoData.js"></script>
   <script src="js/main.js"></script>
-  <style>
-    
-  </style>
 </head>
 <body>
 <div class="menu-bar">
@@ -46,30 +44,27 @@
   </div>
 </div>  
 <div class="main-container">  
-  <p>
-    <a href="#/item:edit">新建项目</a>
-  </p>
-  <p>
-    <a href="#/item:edit?id=1">编辑项目一</a>
-  </p>
-  <p>
-    <a href="#/view:default">defautl view</a>
-  </p>
-  <p>
-    <a href="#/view:statistics?test=1">stastics view</a>
-  </p>
-  <p>
-    <a href="#/view:itemList">list view</a>
-  </p>
+  
 </div>
  
 <script>
-  $().ready(function() {
-    $('.sub-toggle').click(function() {
-      $($(this).data('target')).toggleClass('collapsed');
-    });
+  function createCategoryStyle() {
+    var categoryStyles = document.createElement('style');
+    var categories = pocketData.query({name: 'category'});
+    var styleArr=[];
+    for (var i in categories) {
+      var categoryStyle = ".category-"+categories[i].id+" "+".category-icon {";
+      categoryStyle += "background-color: "+categories[i].color+";}";
+      styleArr.push (categoryStyle);
+    }
+    categoryStyles.innerHTML = styleArr.join(" ");
+    $(categoryStyles).appendTo('head');
+  }
+  
+$().ready(function() {
     
-  });
+  createCategoryStyle();
+});
 </script>
 </body>
 </html>

@@ -43,7 +43,18 @@ a {
     .menu-bar .primary .page-title {
       margin: auto;
       font-size: 18px;
-      text-align: center; }
+      text-align: center;
+      position: relative; }
+      .menu-bar .primary .page-title .dropdown {
+        position: absolute;
+        top: 47px;
+        width: 100%;
+        background-color: rgba(130, 210, 141, 0.9); }
+        .menu-bar .primary .page-title .dropdown ul {
+          padding: 0; }
+        .menu-bar .primary .page-title .dropdown li {
+          list-style: none;
+          border-bottom: 1px dashed rgba(205, 237, 209, 0.9); }
   .menu-bar .secondory {
     padding: 13px 10px;
     transition: all 0.4s ease;
@@ -144,41 +155,19 @@ a {
 
 /* category icon */
 .category-icon {
-  font-style: normal; }
+  font-style: normal;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #93dcb8;
+  border-radius: 50%;
+  vertical-align: middle;
+  text-align: center; }
   .category-icon:before {
-    content: "";
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background-color: #93dcb8;
-    border-radius: 50%;
-    vertical-align: middle;
-    text-align: center;
     color: white;
     line-height: 40px;
     font-size: 28px;
     font-family: "iconfont" !important; }
-  .category-icon.category-income:before {
-    content: "";
-    background-color: #93dcb8; }
-  .category-icon.category-clothes:before {
-    content: "";
-    background-color: #f39f61; }
-  .category-icon.category-eating:before {
-    content: "";
-    background-color: #fe8988; }
-  .category-icon.category-house:before {
-    content: "";
-    background-color: #c6b29c; }
-  .category-icon.category-transport:before {
-    content: "";
-    background-color: #6fb2de; }
-  .category-icon.category-shopping:before {
-    content: "";
-    background-color: #da5a4c; }
-  .category-icon.category-others:before {
-    content: "";
-    background-color: #fdc403; }
 
 /* style for category select list */
 .categories .option-group {
@@ -196,7 +185,7 @@ a {
     margin: 0 auto;
     margin-bottom: 5px; }
 
-.edit-form {
+#edit-form {
   position: fixed;
   bottom: 0px;
   width: 100%;
@@ -206,36 +195,36 @@ a {
   background-color: #f8f8f8;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee; }
-  .edit-form .form-group {
+  #edit-form .form-group {
     display: table;
     width: 100%;
     box-sizing: border-box; }
-  .edit-form .item-category,
-  .edit-form .item-description,
-  .edit-form .item-money {
+  #edit-form .item-category,
+  #edit-form .item-description,
+  #edit-form .item-money {
     display: table-cell;
     padding: 0 5px; }
-  .edit-form .item-category {
+  #edit-form .item-category {
     display: table-cell;
     position: relative;
     width: 50px;
     box-sizing: border-box;
     text-align: center; }
-    .edit-form .item-category i {
+    #edit-form .item-category i {
       position: relative;
       top: -2px; }
-  .edit-form .item-description {
+  #edit-form .item-description {
     border: none;
     background: transparent;
     width: 100%;
     padding-top: 8px;
     padding-bottom: 8px; }
-  .edit-form .item-money {
+  #edit-form .item-money {
     max-width: 100px;
     text-align: right;
     padding-top: 8px;
     padding-bottom: 8px; }
-  .edit-form input {
+  #edit-form input {
     width: inherit;
     max-width: inherit;
     font-size: 1.25em;
@@ -244,10 +233,10 @@ a {
     box-sizing: border-box;
     padding: 8px 3px;
     color: #666; }
-    .edit-form input:focus {
+    #edit-form input:focus {
       outline: none;
       background-color: #ddd; }
-  .edit-form input[name="money"] {
+  #edit-form input[name="money"] {
     text-align: right; }
 
 /* style for modal component */
@@ -367,3 +356,48 @@ a {
       padding-left: 40px; }
     .panel-body .list .list-item .item .item-date {
       padding-right: 40px; }
+
+section.statistics {
+  padding: 15px 0px;
+  border-bottom: 1px solid #ddd; }
+  section.statistics h3 {
+    display: none; }
+  section.statistics .echart {
+    height: 200px; }
+
+#total_stat ul {
+  display: table;
+  width: 100%;
+  padding: 0; }
+
+#total_stat li {
+  display: table-cell;
+  text-align: center;
+  border-right: 1px solid #ddd; }
+  #total_stat li .title {
+    display: block;
+    width: 100%;
+    color: #666;
+    font-size: 22px;
+    margin-bottom: 5px; }
+  #total_stat li .total-income,
+  #total_stat li .total-payment,
+  #total_stat li .total-surplus {
+    display: block;
+    font-size: 20px; }
+    #total_stat li .total-income:before,
+    #total_stat li .total-payment:before,
+    #total_stat li .total-surplus:before {
+      content: "￥"; }
+  #total_stat li .total-income {
+    color: rgba(130, 210, 141, 0.9); }
+  #total_stat li .total-payment {
+    color: #d74c3d; }
+  #total_stat li .total-surplus {
+    color: #444; }
+
+#total_stat li:last-child {
+  border: none; }
+
+#ip_line {
+  height: 300px; }

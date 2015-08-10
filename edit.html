@@ -11,7 +11,7 @@
   <script src="js/zepto.js"></script>
   <script src="js/touch.js"></script>
   <script src="js/datacontroller.js"></script>
-  <script src="js/viewcontroller.js"></script>
+  <script src="js/views.js"></script>
   <script src="js/main.js"></script>
   
 </head>
@@ -30,43 +30,16 @@
     </div>
   </div> 
   <div class="main-container">
-    <div class="categories">
-      <div class="option-group">
-        <div class="option category-income" data-category-id="1">
-          <i class="category-icon category-income"></i> 收入
-        </div>
-      </div>
-      <div class="option-group">
-        <div class="option category-clothes" data-category-id="2">
-          <i class="category-icon category-clothes"></i> 衣服
-        </div>
-        <div class="option category-eating" data-category-id="3">
-          <i class="category-icon category-eating"></i> 饮食
-        </div>
-        <div class="option category-house" data-category-id="4">
-          <i class="category-icon category-house"></i> 住宿
-        </div>
-        <div class="option category-transport" data-category-id="5">
-          <i class="category-icon category-transport"></i> 交通
-        </div>
-        <div class="option category-shopping" data-category-id="6">
-          <i class="category-icon category-shopping"></i> 购物
-        </div>
-        <div class="option category-others" data-category-id="7">
-          <i class="category-icon category-others"></i> 其他
-        </div>
-      </div>
-    </div>
     <div class="edit-form">
      <form action="" id="edit-form">
      <div class="form-group">
-      <div class="current-category">
+      <input type="text" hidden name="id">
+      <div class="item-category">
         <i class="category-icon category-transport"></i>
       </div>
-      <input type="text" hidden name="id">
       <input type="text" hidden name="category" id="category" >
-      <input type="text" class="item-description" placeholder="" name="description">
-      <input type="number" class="item-money" name="money" placeholder="0.00" required>
+      <div class="item-description"><input type="text" placeholder="" name="description"></div>
+      <div class="item-money"><input type="number" name="money" placeholder="0.00" required></div>
       </div>
       </form>
     </div>
@@ -118,7 +91,7 @@
           var option = $(this);
           if (option.data('categoryId') == item.categoryId) {
 //            option.addClass('active');  
-            form.find('.current-category').html(option.find('i').clone());
+            form.find('.item-category').html(option.find('i').clone());
           }
         });
         
@@ -129,7 +102,7 @@
         var option = $(this);
         var contents = option.contents();
         var form = $('.edit-form');
-        form.find('.current-category').html(option.find('i').clone());
+        form.find('.item-category').html(option.find('i').clone());
         form.find('.item-description')[0].placeholder=contents[2].nodeValue.trim();
         form.find('input[name="category"')[0].value = option.data('categoryId');
         alert(form.find('input[name="category"')[0].value);

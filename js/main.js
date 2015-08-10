@@ -50,25 +50,25 @@ var categories = [
   },
 ];
 
-// getScript function
-;
-(function ($) {
-  $.getScript = function (src, func) {
-    var script = document.createElement('script');
-    script.async = "async";
-    script.src = src;
-    if (func) {
-      script.onload = func;
-    }
-    document.getElementsByTagName("head")[0].appendChild(script);
-  }
-})($)
-
+/**
+ * 自定义时间字符处输出
+ * @param {date} obj
+ * @param {str} format
+ * @return {str} dateStr
+ */
+function _customDateString(obj, format) {
+  // to-be-done: some regexp need to match the format
+  var tmpStr = obj.toLocaleString();
+  return obj.toLocaleDateString();
+}
 
 
 $().ready(function () {
-  // data controller init;
   pocketData = new DataController();
+  myrouter = new MyRouter('.main-container');
+  myBar = new MenuBar('.menu-bar');
+  
+  /* pocketData config */
   pocketData.storage = "pocketData";
   if (localStorage.getItem('pocketData') != null) {
     var dataArray = JSON.parse(localStorage.getItem('pocketData'));
@@ -86,10 +86,40 @@ $().ready(function () {
     }));
   }
   pocketData.addJoin("item.categoryId", "category");
+  /* end of pocketData config */
+  
+  /* myBar config */
+  myBar.status.default = {
+    class: 'menu-bar default',
+    compos: {
+      left: {
+        content: '<a href="#" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-list"></i></a>',
+        callback: function() {
+          $('.sub-toggle').click(function() {
+            $($(this).data('target')).toggleClass('collapsed');
+          });
+        },
+      },
+      right: {
+        content: '<a href="#/item:edit?new"><i class="iconfont icon-bianji"></i></a>'
+      }
+    }
+  };
 
-  // router init;
-  myrouter = new MyRouter('.main-container');
-
+  myBar.status.edit = {
+    class: 'menu-bar inverse',
+    compos: {
+      left: {
+        content: '<a href="#/view:prev" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-icon11"></i></a>',
+      },
+      right: {
+        content: '<a href="#/item:save" class="btn btn-primary" id="save" target-form="edit-form">保存</a>',  
+      }
+    }
+  }
+  /* end of myBar config */
+  
+  /* myrouter config */
   // define actions
   myrouter.addAction('item', 'edit', {
     templateURL: 'partials/edit.html',
@@ -104,6 +134,9 @@ $().ready(function () {
   myrouter.addAction('view', 'default', {
     controller: 'listViewController'
   });
+  myrouter.addAction('view', 'prev', {
+    controller: 'preViewController'
+  });
   myrouter.addAction('view', 'itemList', {
     controller: 'listViewController'
   });
@@ -112,15 +145,18 @@ $().ready(function () {
     controller: 'statisticsView'
   });
 
-  // define controller
+  // define controllers
   myrouter.controller('testController', function (paraObject) {
     console.log(paraObject);
   });
 
-  // edit page controller 
   myrouter.controller('editItem', function (paraObject) {
+    if(myBar.status.now != 'edit') {
+      myBar.loadStatus('edit');  
+    }
+    
     var editForm = document.forms['edit-form'];
-    var selectedCateogry = 1;
+    var selectedCategory = 1;
 
     if (paraObject != undefined && paraObject.id != undefined) {
       var editForm = document.forms['edit-form'];
@@ -128,11 +164,11 @@ $().ready(function () {
       editForm.elements['id'].value = item.id;
       editForm.elements['money'].value = item.money;
       editForm.elements['description'].value = item.description;
-
       selectedCategory = item.categoryId;
+      console.log(selectedCategory);
     }
 
-    // generate categoriy list , maybe import a light-weight template engine;
+    // generate categoriy list 
     var categoryList = $('<div></div>').addClass('select-list categories').data('display', "#edit-form .item-category");
     var paymentOptions = pocketData.query({
       name: 'category',
@@ -171,13 +207,8 @@ $().ready(function () {
       display.html(option.find("i").clone());
     });
 
-    $('.categories').find('.category-' + selectedCateogry).trigger('click');
-
-    // may change to global singleton;
-    $('#redirect').on('click', function (e) {
-      $(this).addClass('fade');
-    });
-
+    $('.categories').find('.category-' + selectedCategory).trigger('click');
+    
   });
 
   myrouter.controller('saveItem', function (paraObject) {
@@ -220,21 +251,28 @@ $().ready(function () {
   });
 
   myrouter.controller('deleteItem', function (paraObject) {
-    if (paraObject != undefined && paraObject.id != undefined) {
-      var deleted = pocketData.deleteItem('item', paraObject.id);
-    }
-    if (deleted != undefined) {
-      var message = "账目："
-      message += deleted[0].description ? deleted[0].description : pocketData.data.category.getValueById(deleted[0].categoryId, 'categoryTitle');
+    var confirmed = confirm("项目删除后不可恢复");
+    if (confirmed) {
+      if (paraObject != undefined && paraObject.id != undefined) {
+        var deleted = pocketData.deleteItem('item', paraObject.id);
+      }
+      if (deleted != undefined) {
+        var message = "账目："
+        message += deleted[0].description ? deleted[0].description : pocketData.data.category.getValueById(deleted[0].categoryId, 'categoryTitle');
 
-      message += deleted[0].money + '元， 已删除';
-      alert(message);
-      this.load("#/view:default");
-      setTimeout(pocketData.record(), 3000);
+        message += deleted[0].money + '元， 已删除';
+        alert(message);
+        this.load("#/view:default");
+        setTimeout(pocketData.record(), 3000);
+      }
     }
   });
 
   myrouter.controller('listViewController', function (paraObject) {
+    if (myBar.status.now != 'default') {
+      myBar.loadStatus('default');  
+    }
+    
     $('.main-container').empty();
     if (paraObject != undefined);
     var data = pocketData.query({
@@ -292,6 +330,10 @@ $().ready(function () {
   });
 
   myrouter.controller('statisticsView', function (paraObject) {
+    if(myBar.status.now != 'default') {
+      myBar.loadStatus('default');  
+    }
+    
     var incomeItems = pocketData.query({
       name: 'item',
       filter: {
@@ -576,4 +618,14 @@ $().ready(function () {
       });
 
   });
+  
+  myrouter.controller('preViewController', function(paraObject) {
+//    var lastHash = tracker.splice(tracker.length-1)[0];
+//    this.load(lastHash);
+    this.load("#/view:default");
+  });
+  
+  // init view
+  
+  myrouter.load('#/view:default');
 });
