@@ -1,4 +1,91 @@
 @charset "UTF-8";
+/* CSS animation */
+@-webkit-keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+.fadeInLeft {
+  -webkit-animation-name: fadeInLeft;
+  animation-name: fadeInLeft; }
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+.fadeInRight {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight; }
+
+@-webkit-keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown; }
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp; }
+
 /* basic reset */
 body {
   margin: 0;
@@ -55,14 +142,16 @@ a {
         .menu-bar .primary .page-title .dropdown li {
           list-style: none;
           border-bottom: 1px dashed rgba(205, 237, 209, 0.9); }
-  .menu-bar .secondory {
+  .menu-bar .secondary {
     padding: 13px 10px;
     transition: all 0.4s ease;
     -webkit-transition: all 0.4s ease;
     overflow: hidden; }
-    .menu-bar .secondory.collapsed {
+    .menu-bar .secondary.collapsed {
       padding: 0px 10px;
       height: 0; }
+    .menu-bar .secondary a {
+      margin: 0 5px; }
 
 .menu-bar.inverse {
   background-color: #f8f8f8;
@@ -104,7 +193,9 @@ a {
 
 /* style for list-view */
 .list {
-  width: 100%; }
+  width: 100%;
+  animation: fadeInRight 1s;
+  -webkit-animation: fadeInRight 1s; }
   .list .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
@@ -170,6 +261,9 @@ a {
     font-family: "iconfont" !important; }
 
 /* style for category select list */
+.select-list {
+  animation: fadeInDown 1s; }
+
 .categories .option-group {
   background-color: white;
   border-bottom: 1px solid #eee; }
@@ -194,7 +288,9 @@ a {
   padding: 10px;
   background-color: #f8f8f8;
   border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee; }
+  border-bottom: 1px solid #eee;
+  animation: fadeInUp 1s;
+  -webkit-animation: fadeInUp 1s; }
   #edit-form .form-group {
     display: table;
     width: 100%;

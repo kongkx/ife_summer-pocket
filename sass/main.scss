@@ -21,7 +21,124 @@ $category-transport-icon: "\e605";
 $category-shopping-icon: "\e603";
 $category-others-icon: "\e622";
 
+/* CSS animation */
+@-webkit-keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
 
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInLeft {
+  -webkit-animation-name: fadeInLeft;
+  animation-name: fadeInLeft;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInRight {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+}
+
+@-webkit-keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
 
 /* basic reset */
 body {
@@ -95,7 +212,7 @@ a {
       }
     }
   }
-  .secondory {
+  .secondary {
     padding: 13px 10px;
     transition: all .4s ease;
     -webkit-transition: all .4s ease;
@@ -103,6 +220,9 @@ a {
     &.collapsed {
       padding: 0px 10px;
       height: 0;
+    }
+    a {
+      margin: 0 5px;  
     }
   }
 }
@@ -155,6 +275,8 @@ a {
 /* style for list-view */
 .list {
   width: 100%;
+  animation: fadeInRight 1s;
+  -webkit-animation: fadeInRight 1s;
   .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
@@ -163,6 +285,7 @@ a {
     line-height: $icon-height;
     vertical-align: middle;
     transition: all .4s ease;
+    
     &:nth-child(odd) {
       background-color: white;
     }
@@ -242,6 +365,10 @@ a {
 
 
 /* style for category select list */
+.select-list {
+  animation: fadeInDown 1s;
+  
+}
 .categories {
   .option-group {
     background-color: white;
@@ -272,6 +399,9 @@ a {
   background-color:#f8f8f8;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
+  animation: fadeInUp 1s;
+  -webkit-animation: fadeInUp 1s;
+  
   
   .form-group{
     display: table;
