@@ -349,10 +349,10 @@ $().ready(function () {
     var totalIncome = 0,
       totalPayment = 0;
     for (var i in incomeItems) {
-      totalIncome += incomeItems[i].money;
+      totalIncome += Number(incomeItems[i].money);
     }
     for (var i in paymentItems) {
-      totalPayment += paymentItems[i].money;
+      totalPayment += Number(paymentItems[i].money);
     }
     var totaSurplus = totalIncome - totalPayment;
     $('.total-income').text(totalIncome);
@@ -381,7 +381,7 @@ $().ready(function () {
       });
       var count = 0;
       for (var i in items) {
-        count += items[i].money;
+        count += Number(items[i].money);
       }
       categoryTitle.push(category[key].categoryTitle);
       categoryStat.push({
@@ -421,9 +421,9 @@ $().ready(function () {
       var paymentCount = 0;
       for (var j in tmp) {
         if (tmp[j].type == 'income') {
-          incomeCount += tmp[j].money;
+          incomeCount += Number(tmp[j].money);
         } else if (tmp[j].type == 'payment') {
-          paymentCount += tmp[j].money;
+          paymentCount += Number(tmp[j].money);
         }
       }
       incomeData.push(incomeCount);
