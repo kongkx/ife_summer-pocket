@@ -93,7 +93,7 @@ $().ready(function () {
     class: 'menu-bar default',
     compos: {
       left: {
-        content: '<a href="#" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-list"></i></a>',
+        content: '<a href="#" class="sub-toggle" data-target=".secondary"><i class="iconfont icon-list"></i></a>',
         callback: function() {
           $('.sub-toggle').click(function() {
             $($(this).data('target')).toggleClass('collapsed');
@@ -102,8 +102,11 @@ $().ready(function () {
       },
       right: {
         content: '<a href="#/item:edit?new"><i class="iconfont icon-bianji"></i></a>'
+      },
+      secondary: {
+        content:'<a class="active" href="#/view:default">账目列表</a><a href="#/view:statistics">账目统计</a><a href="#/view:graph">账目图表</a>',
       }
-    }
+    },
   };
 
   myBar.status.edit = {
@@ -272,6 +275,9 @@ $().ready(function () {
     if (myBar.status.now != 'default') {
       myBar.loadStatus('default');  
     }
+    if (!myBar.bar.secondary.hasClass('collapsed')) {
+      myBar.bar.secondary.addClass('collapsed');
+    }
     
     $('.main-container').empty();
     if (paraObject != undefined);
@@ -326,7 +332,6 @@ $().ready(function () {
           },
         }, '.list-item')
         .appendTo('.main-container');
-    
   });
 
   myrouter.controller('statisticsView', function (paraObject) {
@@ -614,7 +619,7 @@ $().ready(function () {
         };
 
         ipLine.setOption(ipOption);
-
+        $('.sub-toggle', myBar.bar).trigger('click');
       });
 
   });

@@ -20,6 +20,7 @@ var menubar = singleton(function() {
 function MenuBar(el) {
   this.bar = menubar(el);
   this.status = {};
+  this.bar.secondary = $('<div />',{class: 'secondary'}).appendTo(this.bar);
 }
 
 MenuBar.prototype.loadStatus = function(str) {
@@ -31,4 +32,13 @@ MenuBar.prototype.loadStatus = function(str) {
     opts.compos.left.callback();
   }
   this.bar.compos.right.html(opts.compos.right.content);
+  
+  if (opts.compos.secondary != undefined) {
+    this.bar.secondary
+      .html(opts.compos.secondary.content)
+      .addClass(opts.compos.secondary.class)
+      .appendTo(this.bar).show();
+  } else {
+    this.bar.secondary.remove();
+  }
 }
