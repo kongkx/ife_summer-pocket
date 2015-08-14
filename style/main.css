@@ -86,6 +86,22 @@
   -webkit-animation-name: fadeInUp;
   animation-name: fadeInUp; }
 
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn; }
+
 /* basic reset */
 body {
   margin: 0;
@@ -194,8 +210,7 @@ a {
 /* style for list-view */
 .list {
   width: 100%;
-  animation: fadeInRight 1s;
-  -webkit-animation: fadeInRight 1s; }
+  animation: fadeIn 1s; }
   .list .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
@@ -203,7 +218,21 @@ a {
     padding: 10px 0;
     line-height: 40px;
     vertical-align: middle;
-    transition: all 0.4s ease; }
+    opacity: 0;
+    transition: all 0.4s ease;
+    animation: fadeInRight 1s;
+    -webkit-animation: fadeInRight 1s;
+    animation-delay: .3s;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards; }
+    .list .list-item:first-child {
+      animation-delay: 0s; }
+    .list .list-item:nth-child(0n+2) {
+      animation-delay: 0.1s; }
+    .list .list-item:nth-child(0n+3) {
+      animation-delay: 0.2s; }
+    .list .list-item:nth-child(0n+4) {
+      animation-delay: 0.25s; }
     .list .list-item:nth-child(odd) {
       background-color: white; }
     .list .list-item:nth-child(even) {
@@ -279,18 +308,21 @@ a {
     margin: 0 auto;
     margin-bottom: 5px; }
 
-#edit-form {
+.edit-form {
   position: fixed;
   bottom: 0px;
+  animation: fadeInUp 1s;
+  -webkit-animation: fadeInUp 1s;
+  transition: all 0.4s ease; }
+
+#edit-form {
   width: 100%;
   box-sizing: border-box;
   line-height: 40px;
   padding: 10px;
   background-color: #f8f8f8;
   border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  animation: fadeInUp 1s;
-  -webkit-animation: fadeInUp 1s; }
+  border-bottom: 1px solid #eee; }
   #edit-form .form-group {
     display: table;
     width: 100%;

@@ -140,6 +140,31 @@ $category-others-icon: "\e622";
   animation-name: fadeInUp;
 }
 
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
 /* basic reset */
 body {
   margin: 0;
@@ -275,8 +300,8 @@ a {
 /* style for list-view */
 .list {
   width: 100%;
-  animation: fadeInRight 1s;
-  -webkit-animation: fadeInRight 1s;
+  animation: fadeIn 1s;
+  
   .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
@@ -284,7 +309,26 @@ a {
     padding: 10px 0;
     line-height: $icon-height;
     vertical-align: middle;
+    opacity: 0;
     transition: all .4s ease;
+    animation: fadeInRight 1s;
+    -webkit-animation: fadeInRight 1s;
+    animation-delay: .3s;  
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+    
+    &:first-child {
+      animation-delay: 0s;
+    }
+    &:nth-child(0n+2) {
+      animation-delay: 0.1s;
+    }
+    &:nth-child(0n+3) {
+      animation-delay: 0.2s;  
+    }
+    &:nth-child(0n+4) {
+      animation-delay: 0.25s;  
+    }
     
     &:nth-child(odd) {
       background-color: white;
@@ -389,9 +433,14 @@ a {
     }
   }
 }
-#edit-form {
+.edit-form {
   position: fixed;
   bottom: 0px;
+  animation: fadeInUp 1s;
+  -webkit-animation: fadeInUp 1s;
+  transition: all .4s ease;
+}
+#edit-form {
   width: 100%;
   box-sizing: border-box;
   line-height: 40px;
@@ -399,9 +448,6 @@ a {
   background-color:#f8f8f8;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  animation: fadeInUp 1s;
-  -webkit-animation: fadeInUp 1s;
-  
   
   .form-group{
     display: table;
