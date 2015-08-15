@@ -6,8 +6,13 @@
  * @method 
  */
 function DataCollection(obj) {
-  this.data = obj.data;
-  this.accumulator = obj.accumulator;
+  if (obj != undefined) {
+    this.data = obj.data;
+    this.accumulator = obj.accumulator;
+  } else {
+    this.data = [];
+    this.accumulator = 0;
+  }
 }
 
 /**
@@ -355,4 +360,7 @@ DataController.prototype.getByMonth = function(name, value) {
   return this.query({name: name, filter: {date: bDate+":"+eDate}});
 }
 
+DataController.prototype.reset = function() {
+  localStorage.removeItem(this.storage);
+}
 
