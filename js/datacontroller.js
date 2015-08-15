@@ -264,9 +264,10 @@ DataController.prototype.query = function(opts) {
       }
     }
   }
+
   if (opts.order != undefined) {
     datas.sort(function(a, b) {
-    switch( opts.order.type) {
+    switch(opts.order.type) {
       case "asc":
         var ti = "1";
         break;

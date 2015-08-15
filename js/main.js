@@ -97,11 +97,12 @@ $().ready(function () {
         callback: function() {
           $('.sub-toggle').click(function() {
             $($(this).data('target')).toggleClass('collapsed');
-          });
+          })
+          $($('.sub-toggle').data('target')).addClass('collapsed');
         },
       },
       right: {
-        content: '<a href="#/item:edit?new"><i class="iconfont icon-bianji"></i></a>'
+        content: '<a href="#/item:edit?new"><i class="iconfont icon-bianji" style="font-size:20px;"></i></a>'
       },
       secondary: {
         content:'<a class="active" href="#/view:default">账目列表</a><a href="#/view:statistics">账目统计</a><a href="#/view:graph">账目图表</a>',
@@ -116,7 +117,7 @@ $().ready(function () {
         content: '<a href="#/view:prev" class="sub-toggle" data-target="#navigation"><i class="iconfont icon-icon11"></i></a>',
       },
       right: {
-        content: '<a href="#/item:save" class="btn btn-primary" id="save" target-form="edit-form">保存</a>',  
+        content: '<a href="#" class="btn btn-primary" id="save" target-form="edit-form">保存</a>',  
       }
     }
   }
@@ -131,21 +132,18 @@ $().ready(function () {
   myrouter.addAction('item', 'delete', {
     controller: 'deleteItem'
   });
-  myrouter.addAction('item', 'save', {
-    controller: 'saveItem'
-  });
-  myrouter.addAction('view', 'default', {
-    controller: 'listViewController'
-  });
-  myrouter.addAction('view', 'prev', {
-    controller: 'preViewController'
-  });
   myrouter.addAction('view', 'itemList', {
     controller: 'listViewController'
   });
   myrouter.addAction('view', 'statistics', {
     templateURL: 'partials/statistics.html',
     controller: 'statisticsView'
+  });
+  myrouter.addAction('view', 'default', {
+    controller: 'listViewController'
+  });
+  myrouter.addAction('view', 'prev', {
+    controller: 'preViewController'
   });
 
   // define controllers
@@ -154,7 +152,7 @@ $().ready(function () {
   });
 
   myrouter.controller('editItem', function (paraObject) {
-    if(myBar.status.now != 'edit') {
+    if(myBar.now != 'edit') {
       myBar.loadStatus('edit');  
     }
     
@@ -168,7 +166,6 @@ $().ready(function () {
       editForm.elements['money'].value = item.money;
       editForm.elements['description'].value = item.description;
       selectedCategory = item.categoryId;
-      console.log(selectedCategory);
     }
 
     // generate categoriy list 
@@ -187,23 +184,23 @@ $().ready(function () {
     });
     var listHTML = '<div class="option-group income">';
     for (var i in incomeOptions) {
-      listHTML += '<div class="option category-' + incomeOptions[i].id + '" data-category-id="' + incomeOptions[i].id + '">';
-      listHTML += '<i class="category-icon iconfont icon-' + incomeOptions[i].icon + '"></i>' + incomeOptions[i].categoryTitle;
+      listHTML += '<div class="option category-' + incomeOptions[i].id + '" data-category-id="' + incomeOptions[i].id + '" data-category-title="'+ incomeOptions[i].categoryTitle +'">';
+      listHTML += '<i class="category-icon iconfont icon-' + incomeOptions[i].icon + '"></i>'
       listHTML += '</div>';
     }
     listHTML += '</div><div class="option-group payment">';
     for (var i in paymentOptions) {
-      listHTML += '<div class="option category-' + paymentOptions[i].id + '" data-category-id="' + paymentOptions[i].id + '">';
-      listHTML += '<i class="category-icon iconfont icon-' + paymentOptions[i].icon + '"></i>' + paymentOptions[i].categoryTitle;
+      listHTML += '<div class="option category-' + paymentOptions[i].id + '" data-category-id="' + paymentOptions[i].id + '" data-category-title="'+ paymentOptions[i].categoryTitle +'">';
+      listHTML += '<i class="category-icon iconfont icon-' + paymentOptions[i].icon +'"></i>';
       listHTML += '</div>';
     }
     listHTML += '</div>';
-    categoryList.html(listHTML).appendTo('.edit-form');
+    categoryList.html(listHTML).appendTo('.main-container');
 
     $('.categories').on('click', '.option', function (e) {
       var option = $(this);
       editForm.elements['category'].value = $(this).data('categoryId');
-      editForm.elements['description'].placeholder = option.text().trim();
+      editForm.elements['description'].placeholder = $(this).data('categoryTitle');
       var display = $(option.parents('.select-list').data('display'));
       display[0].className = display[0].className.replace(/category-\d/,"");
       display.addClass('category-'+$(this).data('categoryId'));
@@ -212,12 +209,15 @@ $().ready(function () {
 
     $('.categories').find('.category-' + selectedCategory).trigger('click');
     
-  });
-
-  myrouter.controller('saveItem', function (paraObject) {
-
+    // 初始化计算器
+    var calculator = $('.calculator_wrap').calculator({display: '.item-money input'});
+    
+    $('input', '.item-money').click(function(e) {
+      e.stopPropagation();
+      calculator.removeClass('collapsed');
+    });
+    
     $('#edit-form').submit(function (e) {
-      console.log("preprocess");
       e.preventDefault();
       var form = this;
       var elements = form.elements;
@@ -230,15 +230,17 @@ $().ready(function () {
       preprocess.categoryId = elements.category.value;
       preprocess.description = elements.description.value;
       preprocess.money = elements.money.value;
-
-      console.log(preprocess);
+      
+      if (preprocess.money == "") {
+        alert("金额不能为空");
+        return false;
+      }
 
       switch (operaCode) {
       case "create":
         var itemId = pocketData.addItem('item', preprocess);
         break;
       case "update":
-        console.log(preprocess.id);
         var itemId = pocketData.updateItem('item', preprocess.id, preprocess);
         break;
       default:
@@ -246,11 +248,32 @@ $().ready(function () {
       }
 
       if (itemId != undefined) {
+        elements.id.value = itemId;
         pocketData.record();
+        var lastItem = pocketData.output('item', itemId)[0];
+        if (lastItem.description == "") {
+          lastItem.description = lastItem.categoryTitle;  
+        }
+        
+        var modalContent = '<div class="item category-'+ lastItem.categoryId +'">';
+        modalContent += '<i class="category-icon icon-font icon-'+ lastItem.icon +'"></i>'
+        modalContent += '<span class="item-description">' + lastItem.description + '</span>'
+        modalContent += '<span class="item-money">'+ lastItem.money +'</span>';
+        modalContent += '</div>';
+        var modal = createModal();
+        modal.context = modalContent;
+        modal.header = "项目已保存";
+        modal.footer = '<a href="#/view:default" class="btn btn-default">返回列表</a><a href="#/item:edit" class="btn btn-primary">再记一笔</a>'
+        modal.show();
+        // trigger model display;
       }
     });
-
-    $('#edit-form').trigger('submit');
+    
+    $('#save').on('click', function(e) {
+      e.preventDefault();
+      // check calculator status and update input;
+      $('#edit-form').trigger('submit');
+    });
   });
 
   myrouter.controller('deleteItem', function (paraObject) {
@@ -272,19 +295,14 @@ $().ready(function () {
   });
 
   myrouter.controller('listViewController', function (paraObject) {
-    if (myBar.status.now != 'default') {
-      myBar.loadStatus('default');  
-    }
-    if (!myBar.bar.secondary.hasClass('collapsed')) {
-      myBar.bar.secondary.addClass('collapsed');
-    }
+    myBar.loadStatus('default');  
     
     $('.main-container').empty();
     if (paraObject != undefined);
     var data = pocketData.query({
       name: 'item',
       order: {
-        key: "id",
+        key: "date",
         type: "desc"
       }
     });
@@ -298,7 +316,6 @@ $().ready(function () {
       item += '<div class="item">';
       item += '<span class="item-category category-'+ itemdata.categoryId  +'"><i class="category-icon iconfont icon-'+itemdata.icon+'"></i>' + itemdata.categoryTitle + '</span>';
       item += '<span class="item-money '+ itemdata.type +'">' + itemdata.money + '</span>';
-      console.log(itemdata.date);
       item += '<span class="item-date">' + _customDateString(new Date(parseInt(itemdata.date))) + '</span>';
       item += '</div>';
       item += '<div class="item-controls">';
@@ -335,9 +352,7 @@ $().ready(function () {
   });
 
   myrouter.controller('statisticsView', function (paraObject) {
-    if(myBar.status.now != 'default') {
-      myBar.loadStatus('default');  
-    }
+    myBar.loadStatus('default');  
     
     var incomeItems = pocketData.query({
       name: 'item',
@@ -400,8 +415,6 @@ $().ready(function () {
       });
     }
 
-
-
     // 收入、支出统计；
     var today = new Date();
     var thisYear = today.getFullYear();
@@ -434,9 +447,6 @@ $().ready(function () {
       incomeData.push(incomeCount);
       paymentData.push(paymentCount);
     }
-
-    // import Echarts.js
-    //    $.getScript("http://echarts.baidu.com/build/dist/echarts.js");
 
     // 路径配置
     require.config({
@@ -617,11 +627,9 @@ $().ready(function () {
         }
     ]
         };
-
         ipLine.setOption(ipOption);
-        $('.sub-toggle', myBar.bar).trigger('click');
-      });
-
+      }
+    );
   });
   
   myrouter.controller('preViewController', function(paraObject) {
@@ -631,6 +639,5 @@ $().ready(function () {
   });
   
   // init view
-  
   myrouter.load('#/view:default');
 });

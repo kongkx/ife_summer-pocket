@@ -11,8 +11,12 @@ gulp.task('sass', function() {
   return gulp.src('sass/*.scss').pipe(sass()).pipe(gulp.dest('style'));
 });
 
-gulp.task('copy-html', function() {
-  return gulp.src(['./*.html','!test.html']).pipe(gulp.dest('dist'));
+gulp.task('copy-index', function() {
+  return gulp.src('./index.html').pipe(gulp.dest('dist'));
+});
+
+gulp.task('copy-partials', function() {
+  return gulp.src('./partials/*.html').pipe(gulp.dest('dist/partials'));
 });
 
 gulp.task('copy-style', function() {
@@ -22,7 +26,7 @@ gulp.task('copy-style', function() {
 });
 
 gulp.task('copy-script', function() {
-  return gulp.src('js/*.js')
+  return gulp.src(['js/*.js','!js/zepto.js','!js/touch.js'])
     .pipe(concat('all.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
@@ -39,9 +43,11 @@ gulp.task('browser-sync', function() {
 
 gulp.task('dis', ['copy-html', 'copy-style', 'copy-script']);
 
-gulp.task('default',['browser-sync'], function() {
-  gulp.watch('./*.html', ['copy-html']);
+gulp.task('default', ['copy-index','sass','copy-script','copy-style','copy-partials'],function() {
+  gulp.watch('./index.html', ['copy-index']);
   gulp.watch('sass/*.scss', ['sass']);
   gulp.watch('js/*js', ['copy-script']);
   gulp.watch('style/*.css', ['copy-style']);
+  gulp.watch('partials/*.html', ['copy-partials']);
+  
 });

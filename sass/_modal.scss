@@ -1,0 +1,32 @@
+.modal {
+  position: fixed;
+  width: 75%;
+  border-radius: 2px;
+  border: 1px solid #eee;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -70%, 0);
+  -webkit-transform: translate3d(-50%, -70%, 0);
+  background-color: #fff;
+  z-index: 500;
+  
+  .modal-header {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .modal-context {
+    padding: 10px;  
+  }
+  
+  .modal-footer {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #eee;
+    .btn {
+      display: inline-block;
+      margin: 0 5px;  
+    }
+  }
+}

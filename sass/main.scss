@@ -1,25 +1,12 @@
 $primary-color: rgba(130,210,141,0.9);
 $alert-color: #d74c3d;
-  
 $income-color: #93dcb8;
-$clothes-color: #f39f61;
-$eating-color: #fe8988;
-$house-color: #c6b29c;
-$transport-color: #6fb2de;
-$shopping-color: #da5a4c;
-$others-color: #fdc403;
 
-$bar-height: 45px;
+$bar-height: 48px;
 $list-item-height: 55px;
 $icon-height: 40px;
 
-$category-income-icon: "\e601";
-$category-clothes-icon: "\e604";
-$category-eating-icon: "\e602";
-$category-house-icon: "\e616";
-$category-transport-icon: "\e605";
-$category-shopping-icon: "\e603";
-$category-others-icon: "\e622";
+@import 'modal';
 
 /* CSS animation */
 @-webkit-keyframes fadeInLeft {
@@ -198,14 +185,11 @@ a {
   z-index: 500;
   .primary {
     display: table;
+    height: $bar-height;
     width: 100%;
     box-sizing: border-box;
-//    display: -webkit-flex;
-//    display: flex;
-    align-items: center;
     padding: 0 10px;
     border-bottom: 1px solid rgba(255,255,255,0.3); 
-    height: $bar-height;
     line-height: $bar-height;
     
     .left-compo,
@@ -265,7 +249,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  margin-top: $bar-height;
+  margin-top: 50px;
   background-color: #f8f8f8;
   overflow-x: hidden;
   overflow-y: auto;
@@ -300,7 +284,6 @@ a {
 /* style for list-view */
 .list {
   width: 100%;
-  animation: fadeIn 1s;
   
   .list-item {
     position: relative;
@@ -311,9 +294,10 @@ a {
     vertical-align: middle;
     opacity: 0;
     transition: all .4s ease;
-    animation: fadeInRight 1s;
-    -webkit-animation: fadeInRight 1s;
+    animation: fadeInRight .7s;
+    -webkit-animation: fadeInRight .7s;
     animation-delay: .3s;  
+    -webkit-animation-delay: .3s;  
     animation-fill-mode: forwards;
     -webkit-animation-fill-mode: forwards;
     
@@ -321,12 +305,18 @@ a {
       animation-delay: 0s;
     }
     &:nth-child(0n+2) {
-      animation-delay: 0.1s;
+      animation-delay: 0.05s;
     }
     &:nth-child(0n+3) {
-      animation-delay: 0.2s;  
+      animation-delay: 0.1s;  
     }
     &:nth-child(0n+4) {
+      animation-delay: 0.15s;  
+    }
+    &:nth-child(0n+5) {
+      animation-delay: 0.2s;
+    }
+    &:nth-child(0n+6) {
       animation-delay: 0.25s;  
     }
     
@@ -410,7 +400,8 @@ a {
 
 /* style for category select list */
 .select-list {
-  animation: fadeInDown 1s;
+  animation: fadeInDown .6s;
+  -webkit-animation: fadeInDown .6s;
   
 }
 .categories {
@@ -428,23 +419,23 @@ a {
     
     .category-icon {
       display: block;
-      margin: 0 auto;
-      margin-bottom: 5px;
+      margin: 2px auto;
+//      margin-bottom: 5px;
     }
   }
 }
 .edit-form {
   position: fixed;
   bottom: 0px;
-  animation: fadeInUp 1s;
-  -webkit-animation: fadeInUp 1s;
+  animation: fadeInUp .6s;
+  -webkit-animation: fadeInUp .6s;
   transition: all .4s ease;
 }
 #edit-form {
   width: 100%;
   box-sizing: border-box;
   line-height: 40px;
-  padding: 10px;
+  padding: 0 10px;
   background-color:#f8f8f8;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
@@ -501,61 +492,9 @@ a {
   }
   input[name="money"] {
     text-align: right;
-  }
-}
-
-/* style for modal component */
-.modal {
-  position: absolute;
-  top: 0; 
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0,0,0,0.3);
-  z-index: 600;
-  
-  .modal-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -70%, 0);
-    -webkit-transform: translate3d(-50%, -70%, 0);
-
-    .modal-header {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      text-align: center;
+    &:focus {
+      background-color: transparent;
     }
-    .modal-content {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-      
-      .item-money {
-        flex: 0 0 60px;  
-      }
-    }
-    .modal-footer {
-      padding: 10px;
-      text-align: center;
-
-      .btn {
-        margin: 0 5px;  
-      }
-    }
-  }
-  
-  &.default {
-    .modal-container {
-      background-color: white;  
-      border-radius: 2px;
-      border: 1px solid rgba(0,0,0,0.4);
-      min-width: 250px;
-      box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
-    }
-  }
-  
-  &.fade {
-    display: none;  
   }
 }
 
@@ -730,4 +669,13 @@ section.statistics {
 
 #ip_line {
   height: 300px;  
+}
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.2);
 }

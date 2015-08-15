@@ -1,4 +1,29 @@
 @charset "UTF-8";
+.modal {
+  position: fixed;
+  width: 75%;
+  border-radius: 2px;
+  border: 1px solid #eee;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -70%, 0);
+  -webkit-transform: translate3d(-50%, -70%, 0);
+  background-color: #fff;
+  z-index: 500; }
+  .modal .modal-header {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee; }
+  .modal .modal-context {
+    padding: 10px; }
+  .modal .modal-footer {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #eee; }
+    .modal .modal-footer .btn {
+      display: inline-block;
+      margin: 0 5px; }
+
 /* CSS animation */
 @-webkit-keyframes fadeInLeft {
   from {
@@ -130,13 +155,12 @@ a {
   z-index: 500; }
   .menu-bar .primary {
     display: table;
+    height: 48px;
     width: 100%;
     box-sizing: border-box;
-    align-items: center;
     padding: 0 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    height: 45px;
-    line-height: 45px; }
+    line-height: 48px; }
     .menu-bar .primary .left-compo,
     .menu-bar .primary .right-compo {
       display: table-cell;
@@ -180,7 +204,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  margin-top: 45px;
+  margin-top: 50px;
   background-color: #f8f8f8;
   overflow-x: hidden;
   overflow-y: auto; }
@@ -209,8 +233,7 @@ a {
 
 /* style for list-view */
 .list {
-  width: 100%;
-  animation: fadeIn 1s; }
+  width: 100%; }
   .list .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
@@ -220,18 +243,23 @@ a {
     vertical-align: middle;
     opacity: 0;
     transition: all 0.4s ease;
-    animation: fadeInRight 1s;
-    -webkit-animation: fadeInRight 1s;
+    animation: fadeInRight 0.7s;
+    -webkit-animation: fadeInRight 0.7s;
     animation-delay: .3s;
+    -webkit-animation-delay: .3s;
     animation-fill-mode: forwards;
     -webkit-animation-fill-mode: forwards; }
     .list .list-item:first-child {
       animation-delay: 0s; }
     .list .list-item:nth-child(0n+2) {
-      animation-delay: 0.1s; }
+      animation-delay: 0.05s; }
     .list .list-item:nth-child(0n+3) {
-      animation-delay: 0.2s; }
+      animation-delay: 0.1s; }
     .list .list-item:nth-child(0n+4) {
+      animation-delay: 0.15s; }
+    .list .list-item:nth-child(0n+5) {
+      animation-delay: 0.2s; }
+    .list .list-item:nth-child(0n+6) {
       animation-delay: 0.25s; }
     .list .list-item:nth-child(odd) {
       background-color: white; }
@@ -291,7 +319,8 @@ a {
 
 /* style for category select list */
 .select-list {
-  animation: fadeInDown 1s; }
+  animation: fadeInDown 0.6s;
+  -webkit-animation: fadeInDown 0.6s; }
 
 .categories .option-group {
   background-color: white;
@@ -305,21 +334,20 @@ a {
   cursor: pointer; }
   .categories .option .category-icon {
     display: block;
-    margin: 0 auto;
-    margin-bottom: 5px; }
+    margin: 2px auto; }
 
 .edit-form {
   position: fixed;
   bottom: 0px;
-  animation: fadeInUp 1s;
-  -webkit-animation: fadeInUp 1s;
+  animation: fadeInUp 0.6s;
+  -webkit-animation: fadeInUp 0.6s;
   transition: all 0.4s ease; }
 
 #edit-form {
   width: 100%;
   box-sizing: border-box;
   line-height: 40px;
-  padding: 10px;
+  padding: 0 10px;
   background-color: #f8f8f8;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee; }
@@ -366,44 +394,8 @@ a {
       background-color: #ddd; }
   #edit-form input[name="money"] {
     text-align: right; }
-
-/* style for modal component */
-.modal {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 600; }
-  .modal .modal-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -70%, 0);
-    -webkit-transform: translate3d(-50%, -70%, 0); }
-    .modal .modal-container .modal-header {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      text-align: center; }
-    .modal .modal-container .modal-content {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee; }
-      .modal .modal-container .modal-content .item-money {
-        flex: 0 0 60px; }
-    .modal .modal-container .modal-footer {
-      padding: 10px;
-      text-align: center; }
-      .modal .modal-container .modal-footer .btn {
-        margin: 0 5px; }
-  .modal.default .modal-container {
-    background-color: white;
-    border-radius: 2px;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    min-width: 250px;
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2); }
-  .modal.fade {
-    display: none; }
+    #edit-form input[name="money"]:focus {
+      background-color: transparent; }
 
 /* style for list item */
 .item {
@@ -529,3 +521,11 @@ section.statistics {
 
 #ip_line {
   height: 300px; }
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2); }
