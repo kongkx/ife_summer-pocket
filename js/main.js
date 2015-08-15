@@ -102,7 +102,7 @@ $().ready(function () {
         content: '<a href="#/item:edit?new"><i class="iconfont icon-bianji" style="font-size:20px;"></i></a>'
       },
       secondary: {
-        content:'<a class="active" href="#/view:default">账目列表</a><a href="#/view:statistics">账目统计</a><a href="#/view:graph">账目图表</a>',
+        content:'<a class="active" href="#/view:itemList">账目列表</a><a href="#/view:statistics">账目统计</a><a href="#/view:graph">账目图表</a>',
       }
     },
   };
@@ -130,17 +130,17 @@ $().ready(function () {
     controller: 'deleteItem'
   });
   myrouter.addAction('view', 'itemList', {
-    controller: 'listViewController'
+    controller: 'listView'
   });
   myrouter.addAction('view', 'statistics', {
     templateURL: 'partials/statistics.html',
     controller: 'statisticsView'
   });
   myrouter.addAction('view', 'default', {
-    controller: 'listViewController'
+    controller: 'defaultView'
   });
   myrouter.addAction('view', 'prev', {
-    controller: 'preViewController'
+    controller: 'preView'
   });
   myrouter.addAction('global', 'reset', {
     Controller: 'globalReset'
@@ -263,7 +263,7 @@ $().ready(function () {
         var modal = createModal();
         modal.context = modalContent;
         modal.header = "项目已保存";
-        modal.footer = '<a href="#/view:default" class="btn btn-default">返回列表</a><a href="#/item:edit" class="btn btn-primary">再记一笔</a>'
+        modal.footer = '<a href="#/view:itemList" class="btn btn-default">返回列表</a><a href="#/item:edit" class="btn btn-primary">再记一笔</a>'
         modal.show();
         // trigger model display;
       }
@@ -288,17 +288,26 @@ $().ready(function () {
 
         message += deleted[0].money + '元， 已删除';
         alert(message);
-        this.load("#/view:default");
+        this.load("#/view:itemList");
         setTimeout(pocketData.record(), 3000);
       }
     }
   });
+  
+  myrouter.controller('defaultView', function() {
+    myBar.loadStatus('default');
+    var defaultContent = '<div class="jumbotron ">';
+      defaultContent += '<p>亲，你的账本还没有账目哦。<p></p>新建一个账目试试吧</p>';
+      defaultContent += '<a href="#/item:edit" class="btn btn-primary btn-lg" data-action="edit" data-id="new">新建账目</a>';
+      defaultContent += '</div>';
+    $('.main-container').html(defaultContent);
+  });
 
-  myrouter.controller('listViewController', function (paraObject) {
+  myrouter.controller('listView', function (paraObject) {
     myBar.loadStatus('default');  
     
     $('.main-container').empty();
-    if (paraObject != undefined);
+    
     var data = pocketData.query({
       name: 'item',
       order: {
@@ -306,49 +315,52 @@ $().ready(function () {
         type: "desc"
       }
     });
-    
-    var list = $('<div />', {class:'list'});
-    
-    htmlCode = [];
-    for (var i in data) {
-      itemdata = data[i];
-      var item = '<div class="list-item">';
-      item += '<div class="item">';
-      item += '<span class="item-category category-'+ itemdata.categoryId  +'"><i class="category-icon iconfont icon-'+itemdata.icon+'"></i>' + itemdata.categoryTitle + '</span>';
-      item += '<span class="item-money '+ itemdata.type +'">' + itemdata.money + '</span>';
-      item += '<span class="item-date">' + _customDateString(new Date(parseInt(itemdata.date))) + '</span>';
-      item += '</div>';
-      item += '<div class="item-controls">';
-      item += '<a href="#/item:edit?id=' + itemdata.id + '" class="item-edit" data-id="'+ itemdata.id +'"><i class="iconfont icon-bianji"></i></a>';
-      item += '<a href="#/item:delete?id='+ itemdata.id +'" class="item-delete" data-id="' + itemdata.id + '"><i class="iconfont icon-jian"></i></a>';
-      item += '</div>';
-      item += '</div>';
-      htmlCode.push(item);
+    if (data.length == 0) {
+      this.load("#/view:default");
+    } else {
+      var list = $('<div />', {class:'list'});
+
+      htmlCode = [];
+      for (var i in data) {
+        itemdata = data[i];
+        var item = '<div class="list-item">';
+        item += '<div class="item">';
+        item += '<span class="item-category category-'+ itemdata.categoryId  +'"><i class="category-icon iconfont icon-'+itemdata.icon+'"></i>' + itemdata.categoryTitle + '</span>';
+        item += '<span class="item-money '+ itemdata.type +'">' + itemdata.money + '</span>';
+        item += '<span class="item-date">' + _customDateString(new Date(parseInt(itemdata.date))) + '</span>';
+        item += '</div>';
+        item += '<div class="item-controls">';
+        item += '<a href="#/item:edit?id=' + itemdata.id + '" class="item-edit" data-id="'+ itemdata.id +'"><i class="iconfont icon-bianji"></i></a>';
+        item += '<a href="#/item:delete?id='+ itemdata.id +'" class="item-delete" data-id="' + itemdata.id + '"><i class="iconfont icon-jian"></i></a>';
+        item += '</div>';
+        item += '</div>';
+        htmlCode.push(item);
+      }
+
+      list.html(htmlCode.join(" "))
+          .on({
+            'swipeLeft': function(e) {
+              $item = $(this);
+              $item.addClass('slide-out').siblings().removeClass('slide-out');
+              $item.parent('.list').addClass('slide-out');
+            }, 
+            'swipeRight': function(e) {
+              $item = $(this);
+              if ($item.hasClass('slide-out')) {
+                $item.removeClass('slide-out');
+                $item.parent('.list').removeClass('slide-out');
+              }
+            },
+            'click': function(e) {
+              $item = $(this);
+              if ($item.parent('.list').hasClass('slide-out')) {
+                $item.removeClass('slide-out').siblings().removeClass('slide-out');
+                $item.parent(".list").removeClass('slide-out');
+              }
+            },
+          }, '.list-item')
+          .appendTo('.main-container');
     }
-    
-    list.html(htmlCode.join(" "))
-        .on({
-          'swipeLeft': function(e) {
-            $item = $(this);
-            $item.addClass('slide-out').siblings().removeClass('slide-out');
-            $item.parent('.list').addClass('slide-out');
-          }, 
-          'swipeRight': function(e) {
-            $item = $(this);
-            if ($item.hasClass('slide-out')) {
-              $item.removeClass('slide-out');
-              $item.parent('.list').removeClass('slide-out');
-            }
-          },
-          'click': function(e) {
-            $item = $(this);
-            if ($item.parent('.list').hasClass('slide-out')) {
-              $item.removeClass('slide-out').siblings().removeClass('slide-out');
-              $item.parent(".list").removeClass('slide-out');
-            }
-          },
-        }, '.list-item')
-        .appendTo('.main-container');
   });
 
   myrouter.controller('statisticsView', function (paraObject) {
@@ -632,17 +644,17 @@ $().ready(function () {
     );
   });
   
-  myrouter.controller('preViewController', function(paraObject) {
+  myrouter.controller('preView', function(paraObject) {
 //    var lastHash = tracker.splice(tracker.length-1)[0];
 //    this.load(lastHash);
-    this.load("#/view:default");
+    this.load("#/view:itemList");
   });
   
   myrouter.controller('globalReset', function() {
     pocketData.reset();
-    myrouter.load('#/view:default');
+    myrouter.load('#/view:defaultView');
   });
   
   // init view
-  myrouter.load('#/view:default');
+  myrouter.load('#/view:itemList');
 });
