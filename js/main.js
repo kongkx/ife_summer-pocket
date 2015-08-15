@@ -76,10 +76,7 @@ $().ready(function () {
     pocketData.dataCollection('category', new DataCollection(dataArray['category']));
 
   } else {
-    pocketData.dataCollection('item', new DataCollection({
-      data: demoData,
-      accumulator: demoData.length
-    }));
+    pocketData.dataCollection('item', new DataCollection());
     pocketData.dataCollection('category', new DataCollection({
       data: categories,
       accumulator: categories.length
@@ -144,6 +141,9 @@ $().ready(function () {
   });
   myrouter.addAction('view', 'prev', {
     controller: 'preViewController'
+  });
+  myrouter.addAction('global', 'reset', {
+    Controller: 'globalReset'
   });
 
   // define controllers
@@ -636,6 +636,11 @@ $().ready(function () {
 //    var lastHash = tracker.splice(tracker.length-1)[0];
 //    this.load(lastHash);
     this.load("#/view:default");
+  });
+  
+  myrouter.controller('globalReset', function() {
+    pocketData.reset();
+    myrouter.load('#/view:default');
   });
   
   // init view

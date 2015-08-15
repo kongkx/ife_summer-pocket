@@ -17,7 +17,7 @@
   <script src="js/router.js"></script>
   <script src="js/datacontroller.js"></script>
   <script src="js/modal.js"></script>
-  <script src="js/demoData.js"></script>
+<!--  <script src="js/demoData.js"></script>-->
   <script src="js/main.js"></script>
 </head>
 <body>
@@ -53,6 +53,13 @@
   
 $().ready(function() {
   createCategoryStyle();
+  $('#main-menu .page-title').click(function() {
+    var modal = createModal();
+    modal.header = "";
+    modal.footer = "";
+    modal.context = '<a href="#/global:reset" class="btn btn-default">重置</a>';
+    modal.show();
+  });
 });
 </script>
 </body>
