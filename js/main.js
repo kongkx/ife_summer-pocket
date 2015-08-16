@@ -587,6 +587,11 @@ $().ready(function () {
               type: 'category',
               boundaryGap: false,
               data: monthArr,
+              axisLine: {
+                lineStyle: {
+                  color: '#ccc'
+                },
+              }
         }
     ],
           yAxis: [
@@ -594,6 +599,11 @@ $().ready(function () {
               type: 'value',
               axisLabel: {
                 formatter: '{value}'
+              },
+              axisLine: {
+                lineStyle: {
+                  color: '#ccc'
+                },
               }
         }
     ],
@@ -602,6 +612,11 @@ $().ready(function () {
               name: '收入',
               type: 'line',
               data: incomeData,
+              itemStyle: {
+                normal: {
+                  color: 'rgba(130,210,141,0.9)',
+                }
+              },
               markPoint: {
                 data: [
                   {
@@ -627,6 +642,11 @@ $().ready(function () {
               name: '支出',
               type: 'line',
               data: paymentData,
+              itemStyle: {
+                normal: {
+                  color: '#d74c3d',
+                },
+              },
               markPoint: {
                 data: [
                   {
