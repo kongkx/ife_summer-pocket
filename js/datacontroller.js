@@ -352,8 +352,10 @@ DataController.prototype.getByMonth = function(name, value) {
     atoms[0]++;
     atoms[1] = "01";
   } else {
-    atoms[1]++;  
+    atoms[1]++;
+    atoms[1] = ("00"+atoms[1]).substr(-2);
   }
+  
   var bDate = new Date(value).getTime();
   var eDate = new Date(atoms.join("-")).getTime() - 1;
   

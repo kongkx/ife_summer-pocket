@@ -222,7 +222,11 @@ $().ready(function () {
       var form = this;
       var elements = form.elements;
       if (elements.money.value == "") {
+        alert("金额不能为空");
         return false;  
+      } else if (Number(elements.money.value) < 0) {
+        alert("金额须为正数，支出项根据账目分类识别，请重新输出");
+        return false;
       }
       var preprocess = {};
       var operaCode = "create";
@@ -269,6 +273,7 @@ $().ready(function () {
     
     $('#save').on('tap', function(e) {
       e.preventDefault();
+      
       // check calculator status and update input;
       $('#edit-form').trigger('submit');
     });
@@ -284,7 +289,7 @@ $().ready(function () {
         var message = "账目："
         message += deleted[0].description ? deleted[0].description : pocketData.data.category.getValueById(deleted[0].categoryId, 'categoryTitle');
 
-        message += deleted[0].money + '元， 已删除';
+        message += "， ￥" + deleted[0].money + '元， 已删除';
         alert(message);
         this.load("#/view:itemList");
         setTimeout(pocketData.record(), 3000);
@@ -353,7 +358,6 @@ $().ready(function () {
               }
             },
             'tap': function(e) {
-              console.log(e);
               $item = $(this);
               if ($item.parent('.list').hasClass('slide-out')) {
                 $item.removeClass('slide-out').siblings().removeClass('slide-out');
@@ -441,10 +445,11 @@ $().ready(function () {
       } else {
         y = thisYear;
       }
-      monthArr.push(y + '-' + (m + 1));
+      var next = ("00"+(m+1)).substr(-2);
+      monthArr.push(y + '-' + next);
     }
     monthArr.reverse();
-
+    
     var incomeData = [];
     var paymentData = [];
     for (var i in monthArr) {
@@ -461,7 +466,7 @@ $().ready(function () {
       incomeData.push(incomeCount);
       paymentData.push(paymentCount);
     }
-
+    
     // 路径配置
     require.config({
       paths: {
