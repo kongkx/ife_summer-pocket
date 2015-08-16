@@ -17,7 +17,7 @@
       }
 
       var current = "";
-      $("td", $el.keyboard).on('click', function () { 
+      $($el.keyboard).on('tap','td', function () { 
         var code = $(this).text().trim(); //键盘按键获取
         if (isNaN(code)) {
           switch (code) {
@@ -76,7 +76,7 @@
         
       });
       
-      $(document).click(function(e) {
+      $(document).on('tap',function(e) {
         if(!$(e.target).parents('.calculator_wrap').length ) {
           if (!$el.hasClass('collpased')){
             if (current != "") {
@@ -179,7 +179,6 @@
     }
 
     this.each(function () {
-      console.log(arguments);
       Controller.call(this, opts);
     });
     

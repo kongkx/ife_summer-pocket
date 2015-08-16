@@ -18,7 +18,7 @@ function MyRouter(el) {
 
 MyRouter.prototype.init = function() {
   var router = this;
-  $(document).on('click', 'a', function(e) {
+  $(document).on('tap', 'a', function(e) {
     if (this.hash.substr(0,1) == "#") {
       e.preventDefault();
       var hash = this.hash;

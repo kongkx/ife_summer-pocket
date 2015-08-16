@@ -2,7 +2,7 @@ $primary-color: rgba(130,210,141,0.9);
 $alert-color: #d74c3d;
 $income-color: #93dcb8;
 
-$bar-height: 48px;
+$bar-height: 50px;
 $list-item-height: 55px;
 $icon-height: 40px;
 
@@ -190,12 +190,15 @@ a {
     box-sizing: border-box;
     padding: 0 10px;
     border-bottom: 1px solid rgba(255,255,255,0.3); 
-    line-height: $bar-height;
     
     .left-compo,
     .right-compo{
       display:table-cell;
       width: 60px;
+//      line-height: $bar-height;
+      i {
+        padding: 10px;  
+      }
     }
     .right-compo {
       text-align: right;
@@ -203,6 +206,7 @@ a {
     .page-title {
       margin: auto;
       font-size: 18px;
+      line-height: $bar-height;
       text-align: center;
       position: relative;
       
@@ -249,7 +253,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  margin-top: 50px;
+  margin-top: $bar-height+1;
   background-color: #f8f8f8;
   overflow-x: hidden;
   overflow-y: auto;
@@ -261,63 +265,89 @@ a {
   left: 50%;
   width: 100%;
   transform: translate3d(-50%,-70%, 0);
+  -webkit-transform: translate3d(-50%,-70%, 0);
   
 }
 /* styles for buttons */
 .btn {
   border-radius: 2px;
-  color: white;
   padding: 6px 8px;
   font-size: 16px;
   
   &.btn-primary {
+    color: white;
     background-color: $primary-color;
     border: 1px solid darken($primary-color, 5%);
   }
   &.btn-default {
     color: #444;
     background-color: white;  
-    border: 1px solid rgba(0,0,0,0.2  );
+    border: 1px solid rgba(0,0,0,0.2);
   }
 }
 
 /* style for list-view */
 .list {
   width: 100%;
+  position: relative;
+  overflow-x: hidden;
   
   .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
     width: 100%;
-    padding: 10px 0;
     line-height: $icon-height;
     vertical-align: middle;
-    opacity: 0;
-    transition: all .4s ease;
-    animation: fadeInRight .7s;
+//    opacity: 0;
+    transition: margin .4s ease;
     -webkit-animation: fadeInRight .7s;
-    animation-delay: .3s;  
-    -webkit-animation-delay: .3s;  
-    animation-fill-mode: forwards;
+    animation: fadeInRight .7s;
+    -webkit-animation-delay: .4s;  
+    animation-delay: .4s;  
     -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    
+    &.slide-out {
+      margin-left: -110px;  
+    }
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    
     
     &:first-child {
+      -webkit-animation-delay: 0s;
       animation-delay: 0s;
     }
     &:nth-child(0n+2) {
+      -webkit-animation-delay: 0.05s;
       animation-delay: 0.05s;
     }
     &:nth-child(0n+3) {
+      -webkit-animation-delay: 0.1s;  
       animation-delay: 0.1s;  
     }
     &:nth-child(0n+4) {
+      -webkit-animation-delay: 0.15s;  
       animation-delay: 0.15s;  
     }
     &:nth-child(0n+5) {
+      -webkit-animation-delay: 0.2s;
       animation-delay: 0.2s;
     }
     &:nth-child(0n+6) {
+      -webkit-animation-delay: 0.25s; 
       animation-delay: 0.25s;  
+    }
+    &:nth-child(0n+7) {
+      -webkit-animation-delay: 0.30s; 
+      animation-delay: 0.30s;  
+    }
+    &:nth-child(0n+8) {
+      -webkit-animation-delay: 0.35s; 
+      animation-delay: 0.35s;  
     }
     
     &:nth-child(odd) {
@@ -328,10 +358,17 @@ a {
     }
     
     .item {
-      padding: 0 15px;  
+      padding: 10px 15px;  
+      float: left;
+      box-sizing: border-box;
+      width: 100%;
+      margin-left: -100%;
+      position: relative;
+      left: 100%;
     }
     .item-category {
       font-size: 20px;
+      line-height: 0;
       i {
         margin-right: 15px;  
       }
@@ -348,33 +385,24 @@ a {
     }
     
     .item-controls {
-      position: absolute;
-      left: 100%;
-      top: 0;
+      float:left;
+      margin-left: 100%;
+      display: table;
       width: 110px;
       height: 100%;
-      background-color: #d74c3d;
-      font-size: 0;
+      background-color: $alert-color;
       
       a {
-        display: block;
-        box-sizing: border-box;
-        width: 55px;
-        height: 100%;
+        display: table-cell;
         color: white;
-        float: left;
         text-align: center;
-        line-height: 60px;
+        padding: 10px 0;
         i {
           font-size: 20px !important;
-          
         }
       }
     }
     
-    &.slide-out {
-      margin-left: -110px;  
-    }
   }
 }
 
@@ -400,9 +428,8 @@ a {
 
 /* style for category select list */
 .select-list {
-  animation: fadeInDown .6s;
   -webkit-animation: fadeInDown .6s;
-  
+  animation: fadeInDown .6s;
 }
 .categories {
   .option-group {
@@ -427,9 +454,8 @@ a {
 .edit-form {
   position: fixed;
   bottom: 0px;
-  animation: fadeInUp .6s;
   -webkit-animation: fadeInUp .6s;
-  transition: all .4s ease;
+  animation: fadeInUp .6s;
 }
 #edit-form {
   width: 100%;
@@ -457,6 +483,7 @@ a {
     width: 50px;
     box-sizing: border-box;
     text-align: center;
+    height: 40px;
     i {
       position: relative;
       top: -2px;

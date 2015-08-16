@@ -13,15 +13,21 @@
     border: 1px solid #ddd;
 }
 .calc-keyboard td {
-    cursor: pointer;
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  height: 50px;
+  line-height: 50px;
+  font-size: 18px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .calc-record {
   height: 30px;

@@ -92,7 +92,7 @@ $().ready(function () {
       left: {
         content: '<a href="#" class="sub-toggle" data-target=".secondary"><i class="iconfont icon-list"></i></a>',
         callback: function() {
-          $('.sub-toggle').click(function() {
+          $('.sub-toggle').on('tap', function() {
             $($(this).data('target')).toggleClass('collapsed');
           })
           $($('.sub-toggle').data('target')).addClass('collapsed');
@@ -197,7 +197,7 @@ $().ready(function () {
     listHTML += '</div>';
     categoryList.html(listHTML).appendTo('.main-container');
 
-    $('.categories').on('click', '.option', function (e) {
+    $('.categories').on('tap', '.option', function (e) {
       var option = $(this);
       editForm.elements['category'].value = $(this).data('categoryId');
       editForm.elements['description'].placeholder = $(this).data('categoryTitle');
@@ -207,12 +207,12 @@ $().ready(function () {
       display.html(option.find("i").clone());
     });
 
-    $('.categories').find('.category-' + selectedCategory).trigger('click');
+    $('.categories').find('.category-' + selectedCategory).trigger('tap');
     
     // 初始化计算器
     var calculator = $('.calculator_wrap').calculator({display: '.item-money input'});
     
-    $('input', '.item-money').click(function(e) {
+    $('input', '.item-money').on('tap', function(e) {
       e.stopPropagation();
       calculator.removeClass('collapsed');
     });
@@ -221,6 +221,9 @@ $().ready(function () {
       e.preventDefault();
       var form = this;
       var elements = form.elements;
+      if (elements.money.value == "") {
+        return false;  
+      }
       var preprocess = {};
       var operaCode = "create";
       if (elements.id.value != "") {
@@ -230,11 +233,6 @@ $().ready(function () {
       preprocess.categoryId = elements.category.value;
       preprocess.description = elements.description.value;
       preprocess.money = elements.money.value;
-      
-      if (preprocess.money == "") {
-        alert("金额不能为空");
-        return false;
-      }
 
       switch (operaCode) {
       case "create":
@@ -269,7 +267,7 @@ $().ready(function () {
       }
     });
     
-    $('#save').on('click', function(e) {
+    $('#save').on('tap', function(e) {
       e.preventDefault();
       // check calculator status and update input;
       $('#edit-form').trigger('submit');
@@ -323,9 +321,12 @@ $().ready(function () {
       htmlCode = [];
       for (var i in data) {
         itemdata = data[i];
+        if (itemdata.description == "") {
+          itemdata.description = itemdata.categoryTitle;  
+        }
         var item = '<div class="list-item">';
         item += '<div class="item">';
-        item += '<span class="item-category category-'+ itemdata.categoryId  +'"><i class="category-icon iconfont icon-'+itemdata.icon+'"></i>' + itemdata.categoryTitle + '</span>';
+        item += '<span class="item-category category-'+ itemdata.categoryId  +'"><i class="category-icon iconfont icon-'+itemdata.icon+'"></i>' + itemdata.description + '</span>';
         item += '<span class="item-money '+ itemdata.type +'">' + itemdata.money + '</span>';
         item += '<span class="item-date">' + _customDateString(new Date(parseInt(itemdata.date))) + '</span>';
         item += '</div>';
@@ -351,7 +352,8 @@ $().ready(function () {
                 $item.parent('.list').removeClass('slide-out');
               }
             },
-            'click': function(e) {
+            'tap': function(e) {
+              console.log(e);
               $item = $(this);
               if ($item.parent('.list').hasClass('slide-out')) {
                 $item.removeClass('slide-out').siblings().removeClass('slide-out');

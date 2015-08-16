@@ -26,13 +26,13 @@ var createModal = singleton(function() {
       $("<div />", {class: 'modal-footer'}).html(this.footer).appendTo(this);
     }
     var mask = createMask();
-    mask.click(function() {
-      createModal().trigger('click');
+    mask.on('tap',function() {
+      createModal().trigger('tap');
     });
     mask.show();
     Zepto.fn.show.call(this,'');
   }
-  $el.on('click', function() {
+  $el.on('tap', function() {
     createMask().off().hide();
     $(this).hide();
   });

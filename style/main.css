@@ -155,21 +155,24 @@ a {
   z-index: 500; }
   .menu-bar .primary {
     display: table;
-    height: 48px;
+    height: 50px;
     width: 100%;
     box-sizing: border-box;
     padding: 0 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    line-height: 48px; }
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
     .menu-bar .primary .left-compo,
     .menu-bar .primary .right-compo {
       display: table-cell;
       width: 60px; }
+      .menu-bar .primary .left-compo i,
+      .menu-bar .primary .right-compo i {
+        padding: 10px; }
     .menu-bar .primary .right-compo {
       text-align: right; }
     .menu-bar .primary .page-title {
       margin: auto;
       font-size: 18px;
+      line-height: 50px;
       text-align: center;
       position: relative; }
       .menu-bar .primary .page-title .dropdown {
@@ -204,7 +207,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  margin-top: 50px;
+  margin-top: 51px;
   background-color: #f8f8f8;
   overflow-x: hidden;
   overflow-y: auto; }
@@ -215,15 +218,16 @@ a {
   top: 50%;
   left: 50%;
   width: 100%;
-  transform: translate3d(-50%, -70%, 0); }
+  transform: translate3d(-50%, -70%, 0);
+  -webkit-transform: translate3d(-50%, -70%, 0); }
 
 /* styles for buttons */
 .btn {
   border-radius: 2px;
-  color: white;
   padding: 6px 8px;
   font-size: 16px; }
   .btn.btn-primary {
+    color: white;
     background-color: rgba(130, 210, 141, 0.9);
     border: 1px solid rgba(111, 203, 124, 0.9); }
   .btn.btn-default {
@@ -233,42 +237,67 @@ a {
 
 /* style for list-view */
 .list {
-  width: 100%; }
+  width: 100%;
+  position: relative;
+  overflow-x: hidden; }
   .list .list-item {
     position: relative;
     border-bottom: 1px dashed #eee;
     width: 100%;
-    padding: 10px 0;
     line-height: 40px;
     vertical-align: middle;
-    opacity: 0;
-    transition: all 0.4s ease;
-    animation: fadeInRight 0.7s;
+    transition: margin 0.4s ease;
     -webkit-animation: fadeInRight 0.7s;
-    animation-delay: .3s;
-    -webkit-animation-delay: .3s;
-    animation-fill-mode: forwards;
-    -webkit-animation-fill-mode: forwards; }
+    animation: fadeInRight 0.7s;
+    -webkit-animation-delay: .4s;
+    animation-delay: .4s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards; }
+    .list .list-item.slide-out {
+      margin-left: -110px; }
+    .list .list-item::after {
+      content: "";
+      display: table;
+      clear: both; }
     .list .list-item:first-child {
+      -webkit-animation-delay: 0s;
       animation-delay: 0s; }
     .list .list-item:nth-child(0n+2) {
+      -webkit-animation-delay: 0.05s;
       animation-delay: 0.05s; }
     .list .list-item:nth-child(0n+3) {
+      -webkit-animation-delay: 0.1s;
       animation-delay: 0.1s; }
     .list .list-item:nth-child(0n+4) {
+      -webkit-animation-delay: 0.15s;
       animation-delay: 0.15s; }
     .list .list-item:nth-child(0n+5) {
+      -webkit-animation-delay: 0.2s;
       animation-delay: 0.2s; }
     .list .list-item:nth-child(0n+6) {
+      -webkit-animation-delay: 0.25s;
       animation-delay: 0.25s; }
+    .list .list-item:nth-child(0n+7) {
+      -webkit-animation-delay: 0.30s;
+      animation-delay: 0.30s; }
+    .list .list-item:nth-child(0n+8) {
+      -webkit-animation-delay: 0.35s;
+      animation-delay: 0.35s; }
     .list .list-item:nth-child(odd) {
       background-color: white; }
     .list .list-item:nth-child(even) {
       background-color: #fbfbfb; }
     .list .list-item .item {
-      padding: 0 15px; }
+      padding: 10px 15px;
+      float: left;
+      box-sizing: border-box;
+      width: 100%;
+      margin-left: -100%;
+      position: relative;
+      left: 100%; }
     .list .list-item .item-category {
-      font-size: 20px; }
+      font-size: 20px;
+      line-height: 0; }
       .list .list-item .item-category i {
         margin-right: 15px; }
     .list .list-item .item-description {
@@ -280,26 +309,19 @@ a {
       text-align: right;
       margin: 0 15px; }
     .list .list-item .item-controls {
-      position: absolute;
-      left: 100%;
-      top: 0;
+      float: left;
+      margin-left: 100%;
+      display: table;
       width: 110px;
       height: 100%;
-      background-color: #d74c3d;
-      font-size: 0; }
+      background-color: #d74c3d; }
       .list .list-item .item-controls a {
-        display: block;
-        box-sizing: border-box;
-        width: 55px;
-        height: 100%;
+        display: table-cell;
         color: white;
-        float: left;
         text-align: center;
-        line-height: 60px; }
+        padding: 10px 0; }
         .list .list-item .item-controls a i {
           font-size: 20px !important; }
-    .list .list-item.slide-out {
-      margin-left: -110px; }
 
 /* category icon */
 .category-icon {
@@ -319,8 +341,8 @@ a {
 
 /* style for category select list */
 .select-list {
-  animation: fadeInDown 0.6s;
-  -webkit-animation: fadeInDown 0.6s; }
+  -webkit-animation: fadeInDown 0.6s;
+  animation: fadeInDown 0.6s; }
 
 .categories .option-group {
   background-color: white;
@@ -339,9 +361,8 @@ a {
 .edit-form {
   position: fixed;
   bottom: 0px;
-  animation: fadeInUp 0.6s;
   -webkit-animation: fadeInUp 0.6s;
-  transition: all 0.4s ease; }
+  animation: fadeInUp 0.6s; }
 
 #edit-form {
   width: 100%;
@@ -365,7 +386,8 @@ a {
     position: relative;
     width: 50px;
     box-sizing: border-box;
-    text-align: center; }
+    text-align: center;
+    height: 40px; }
     #edit-form .item-category i {
       position: relative;
       top: -2px; }
