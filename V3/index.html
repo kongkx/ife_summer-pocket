@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-mns-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon" sizes="120x120" href="icon_@2x.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icon_@2.5x.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon_@3x.png">
+  <title>Pocket</title>
+  <link rel="stylesheet" href="style/fonts/iconfont.css">
+  <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="plugins/calculator.css">
+  <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+  <script src="js/zepto.js"></script>
+  <script src="js/touch.js"></script>
+  <script src="plugins/calculator.js"></script>
+  <script src="js/menubar.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/datacontroller.js"></script>
+  <script src="js/modal.js"></script>
+<!--  <script src="js/demoData.js"></script>-->
+  <script src="js/main.js"></script>
+</head>
+<body>
+<div class="menubar">
+  <div id="main-menu" class="primary">
+    <div class="left-compo">
+    </div>
+    <div class="page-title">
+      记账本
+    </div>
+    <div class="right-compo">
+    </div>
+  </div>
+  <div class="secondary"></div>
+</div>  
+<div class="main-container">  
+  
+</div>
+ 
+<script>
+  function createCategoryStyle() {
+    var categoryStyles = document.createElement('style');
+    var categories = pocketData.query({name: 'category'});
+    var styleArr=[];
+    for (var i in categories) {
+      var categoryStyle = ".category-"+categories[i].id+" "+".category-icon {";
+      categoryStyle += "background-color: "+categories[i].color+";}";
+      styleArr.push (categoryStyle);
+    }
+    categoryStyles.innerHTML = styleArr.join(" ");
+    $(categoryStyles).appendTo('head');
+  }
+  
+$().ready(function() {
+  createCategoryStyle();
+  $('#main-menu .page-title').click(function() {
+    var modal = createModal();
+    modal.header = "";
+    modal.footer = "";
+    modal.context = '<a href="#/global:reset" class="btn btn-default">重置</a>';
+    modal.show();
+  });
+});
+</script>
+</body>
+</html>
